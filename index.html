@@ -1542,7 +1542,15 @@ setInterval(loadLeaderboard, REFRESH_INTERVAL);
 
   <!-- Per-partner breakdown -->
   <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:28px;margin-bottom:32px;">
-    <h3 style="color:#fff;font-size:1.1rem;font-weight:700;margin:0 0 20px;">Partner Breakdown</h3>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px;">
+      <h3 style="color:#fff;font-size:1.1rem;font-weight:700;margin:0;">Partner Breakdown</h3>
+      <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:8px 14px;">
+        <span style="font-size:0.78rem;color:rgba(255,255,255,0.5);white-space:nowrap;">Target leads / person:</span>
+        <input type="number" min="0" placeholder="0" id="global-target-input"
+          style="width:56px;background:rgba(255,255,255,0.08);border:1px solid rgba(0,200,212,0.4);border-radius:6px;padding:5px 8px;color:#fff;font-size:0.9rem;font-weight:700;text-align:center;outline:none;"
+          onchange="setGlobalTarget(parseInt(this.value)||0)">
+      </div>
+    </div>
     <div id="dash-partner-bars"></div>
   </div>
 
@@ -1618,15 +1626,16 @@ let dashAllRows = [];
 let dashExcluded = new Set(JSON.parse(sessionStorage.getItem('dashExcluded') || '[]'));
 let dashInterval = null;
 
-// Partner attendee counts — persisted in localStorage per event
+// Partner attendee counts + global target — persisted in localStorage per event
 const ATTENDEE_KEY = 'partnerAttendees_' + WEB_APP_URL.split('/').pop();
 let partnerAttendees = JSON.parse(localStorage.getItem(ATTENDEE_KEY) || '{}');
-// partnerAttendees[name] = { att: N, target: N }
+// partnerAttendees._globalTarget = N  (leads per person, same for all)
+// partnerAttendees[name] = N  (attendee count)
 function saveAttendees() { localStorage.setItem(ATTENDEE_KEY, JSON.stringify(partnerAttendees)); }
-function getAtt(name)    { return (partnerAttendees[name] || {}).att    || 0; }
-function getTarget(name) { return (partnerAttendees[name] || {}).target || 0; }
-function setAtt(name, v)    { if (!partnerAttendees[name]) partnerAttendees[name] = {}; partnerAttendees[name].att    = v; saveAttendees(); renderDash(); }
-function setTarget(name, v) { if (!partnerAttendees[name]) partnerAttendees[name] = {}; partnerAttendees[name].target = v; saveAttendees(); renderDash(); }
+function getAtt(name)    { return partnerAttendees[name] || 0; }
+function getGlobalTarget() { return partnerAttendees._globalTarget || 0; }
+function setAtt(name, v)    { partnerAttendees[name] = v; saveAttendees(); renderDash(); }
+function setGlobalTarget(v) { partnerAttendees._globalTarget = v; saveAttendees(); renderDash(); }
 let dashActiveTab = 'all';
 
 function renderDashTabs() {
@@ -1714,41 +1723,37 @@ function renderDashStats(rows) {
   renderLeaderboard(lb);
 
   const maxLeads = lb.length > 0 ? Math.max(...lb.map(d => d.leads), 1) : 1;
+  // Populate global target input
+  const _gti = document.getElementById('global-target-input');
+  if (_gti) _gti.value = getGlobalTarget() || '';
+
   document.getElementById('dash-partner-bars').innerHTML = lb.length === 0
     ? '<p style="color:rgba(255,255,255,0.35);font-size:0.85rem;margin:0;">No leads yet.</p>'
     : lb.map(item => {
         const pname = item.partner.replace(/'/g, "\'").replace(/</g, '&lt;');
-        const att    = getAtt(item.partner);
-        const tgt    = getTarget(item.partner);
-        const totalTarget = att * tgt;
-        const pct    = totalTarget > 0 ? Math.min(item.leads / totalTarget * 100, 100) : 0;
-        const barColor = pct >= 100 ? '#4ade80' : pct >= 60 ? 'var(--gold)' : 'var(--teal2)';
-        const progressBlock = totalTarget > 0 ? `
-          <div style="display:flex;align-items:center;gap:8px;min-width:200px;">
-            <div style="flex:1;height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;">
-              <div style="height:100%;width:${pct.toFixed(1)}%;background:${barColor};border-radius:3px;transition:width 0.4s;"></div>
-            </div>
-            <span style="font-size:0.78rem;font-weight:700;color:${barColor};white-space:nowrap;">${item.leads}/${totalTarget} <span style="font-weight:400;color:rgba(255,255,255,0.4);">(${Math.round(pct)}%)</span></span>
-          </div>` : '<div style="min-width:200px;font-size:0.72rem;color:rgba(255,255,255,0.25);">Set attendees &amp; target \u2192</div>';
+        const att         = getAtt(item.partner);
+        const globalTgt   = getGlobalTarget();
+        const totalTarget = att * globalTgt;
+        const pct         = totalTarget > 0 ? Math.min(item.leads / totalTarget * 100, 100) : 0;
+        const barColor    = pct >= 100 ? '#4ade80' : pct >= 60 ? '#f97316' : '#38bdf8';
+        const icon        = pct >= 100 ? '&#x2705;' : pct >= 60 ? '&#x1F525;' : '&#x23F3;';
+        const scoreText   = totalTarget > 0
+          ? `<span style="font-size:0.85rem;font-weight:700;color:${barColor};white-space:nowrap;">${item.leads}/${totalTarget}</span><span style="font-size:0.75rem;color:rgba(255,255,255,0.45);margin-left:4px;">${Math.round(pct)}%</span>`
+          : `<span style="font-size:0.85rem;font-weight:700;color:var(--gold);">${item.leads}</span>`;
+        const track = totalTarget > 0
+          ? `<div style="flex:1;height:10px;background:rgba(255,255,255,0.08);border-radius:5px;overflow:hidden;"><div style="height:100%;width:${pct.toFixed(1)}%;background:${barColor};border-radius:5px;transition:width 0.5s;"></div></div>`
+          : `<div style="flex:1;height:10px;background:rgba(255,255,255,0.08);border-radius:5px;overflow:hidden;"><div style="height:100%;width:${Math.round((item.leads/maxLeads)*100)}%;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:5px;"></div></div>`;
         return `
-      <div class="dash-partner-row" style="margin-bottom:12px;align-items:center;">
-        <div class="dash-partner-label" title="${item.partner}">${item.partner}</div>
-        <div class="dash-partner-track">
-          <div class="dash-partner-fill" style="transform:scaleX(${Math.round((item.leads/maxLeads)*100)/100})"></div>
-        </div>
-        <div class="dash-partner-count">${item.leads}</div>
-        <div style="display:flex;align-items:center;gap:6px;margin-left:12px;">
-          <label style="font-size:0.7rem;color:rgba(255,255,255,0.4);white-space:nowrap;">Att.</label>
-          <input type="number" min="0" placeholder="0" title="Attendees for ${item.partner}"
+      <div style="display:grid;grid-template-columns:28px 160px 1fr auto auto;align-items:center;gap:12px;margin-bottom:14px;">
+        <span style="font-size:1rem;text-align:center;">${totalTarget > 0 ? icon : ''}</span>
+        <span style="font-size:0.88rem;font-weight:700;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${item.partner}">${item.partner}</span>
+        ${track}
+        ${scoreText}
+        <div style="display:flex;align-items:center;gap:4px;">
+          <input type="number" min="0" placeholder="Att." title="Attendees for ${item.partner}"
             value="${att || ''}"
             onchange="setAtt('${pname}', parseInt(this.value)||0)"
-            style="width:52px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);border-radius:6px;padding:4px 6px;color:#fff;font-size:0.78rem;text-align:center;outline:none;">
-          <label style="font-size:0.7rem;color:rgba(255,255,255,0.4);white-space:nowrap;">Tgt/att</label>
-          <input type="number" min="0" placeholder="0" title="Lead target per attendee for ${item.partner}"
-            value="${tgt || ''}"
-            onchange="setTarget('${pname}', parseInt(this.value)||0)"
-            style="width:52px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);border-radius:6px;padding:4px 6px;color:#fff;font-size:0.78rem;text-align:center;outline:none;">
-          ${progressBlock}
+            style="width:50px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.15);border-radius:6px;padding:4px 6px;color:rgba(255,255,255,0.7);font-size:0.75rem;text-align:center;outline:none;">
         </div>
       </div>`;
       }).join('');

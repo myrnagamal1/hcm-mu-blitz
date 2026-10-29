@@ -1446,6 +1446,26 @@ function renderLeaderboard(data) {
 // Initial load + auto-refresh
 loadLeaderboard();
 setInterval(loadLeaderboard, REFRESH_INTERVAL);
+
+// ── REAL-TIME SSE — broadcast popup+sound to all open tabs ──
+(function connectSSE() {
+  if (!window.EventSource) return;
+  var es = new EventSource(WEB_APP_URL + '/stream');
+  es.onmessage = function(e) {
+    try {
+      var data = JSON.parse(e.data);
+      if (data.event === 'new-lead') {
+        playSuccessSound();
+        showLeadPopup(data.partner, data.account);
+      }
+    } catch(_) {}
+  };
+  es.onerror = function() {
+    es.close();
+    setTimeout(connectSSE, 5000);
+  };
+})();
+
 </script>
 
 <!-- ══ DASHBOARD SECTION ══════════════════════════════════════ -->
@@ -1815,7 +1835,7 @@ function lfSubmit() {
     .then(d => {
       if (d.status === 'ok' || d.result === 'success') {
         playSuccessSound();
-        showLeadPopup();
+        showLeadPopup(partner, account);
         status.innerHTML = '';
         ['lf-rep','lf-account','lf-contact','lf-title','lf-phone','lf-email','lf-website','lf-nextstep','lf-notes'].forEach(id =>
           document.getElementById(id).value = '');
@@ -1881,8 +1901,16 @@ function playSuccessSound() {
   } catch(e) {}
 }
 
-function showLeadPopup() {
+function showLeadPopup(partner, account) {
   var popup = document.getElementById('lead-success-popup');
+  var sub = document.querySelector('.lsp-sub');
+  if (partner && account) {
+    sub.textContent = partner + ' just submitted ' + account + '!';
+  } else if (partner) {
+    sub.textContent = partner + ' just submitted a lead!';
+  } else {
+    sub.textContent = 'Great work — keep the momentum going!';
+  }
   popup.classList.add('show');
   // spawn confetti dots
   var colors = ['#FFC300','#00C8D4','#ff6b6b','#a78bfa','#34d399','#fff'];

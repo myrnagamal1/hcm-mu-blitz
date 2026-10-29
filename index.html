@@ -1233,22 +1233,25 @@ const REFRESH_INTERVAL = 60000; // 60 seconds
       </div>
       <div class="agenda-items">
         <div class="agenda-item">
-          <div class="agenda-time">09:00 – 13:00</div>
-          <div class="agenda-label">Morning Blitz Sprint</div>
+          <div class="agenda-time">09:00 – 09:30</div>
+          <div class="agenda-label">Welcome</div>
+        </div>
+        <div class="agenda-item">
+          <div class="agenda-time">09:30 – 13:00</div>
+          <div class="agenda-label">Blitz Execution</div>
         </div>
         <div class="agenda-item">
           <div class="agenda-time">13:00 – 14:00</div>
-          <div class="agenda-label">Lunch Break</div>
+          <div class="agenda-label">Lunch</div>
         </div>
         <div class="agenda-item">
-          <div class="agenda-time">14:00 – 17:00</div>
-          <div class="agenda-label">Afternoon Blitz Sprint</div>
+          <div class="agenda-time">14:00 – 17:30</div>
+          <div class="agenda-label">Blitz Execution</div>
         </div>
-        ${i === DAYS.length - 1 ? `
         <div class="agenda-item special">
-          <div class="agenda-time">17:00 – 18:00</div>
-          <div class="agenda-label">🥇 Announcing the Winners</div>
-        </div>` : ''}
+          <div class="agenda-time">17:30 – 18:00</div>
+          <div class="agenda-label">🥇 Award Ceremony</div>
+        </div>
       </div>
     </div>`).join('');
 
@@ -1761,7 +1764,8 @@ function lfSubmit() {
 function playSuccessSound() {
   try {
     var ctx = new (window.AudioContext || window.webkitAudioContext)();
-    var t = ctx.currentTime;
+    ctx.resume();
+    var t = ctx.currentTime + 0.05;
     for (var i = 0; i < 6; i++) {
       (function(offset) {
         var buf = ctx.createBuffer(1, ctx.sampleRate * 0.08, ctx.sampleRate);

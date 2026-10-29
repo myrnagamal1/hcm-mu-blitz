@@ -1064,7 +1064,7 @@
 
         <!-- Assigned SDE (only shown when SDEs are configured) -->
         <div class="lf-group" id="lf-sde-group" style="display:none;">
-          <label class="lf-label">Assigned SDE</label>
+          <label class="lf-label">Assigned SDE <span class="lf-req">*</span></label>
           <select id="lf-sde" class="lf-input">
             <option value="">— Select SDE —</option>
           </select>
@@ -1712,6 +1712,12 @@ function lfSubmit() {
 
   if (!partner || !rep || !account || !contact || !title || !phone || !website || !industry || !outcome || !nextstep || !ai) {
     status.innerHTML = '<span style="color:#ff6b6b;">Please fill in all required fields.</span>';
+    return;
+  }
+
+  // Validate SDE
+  if (SDES.length > 0 && !sde) {
+    status.innerHTML = '<span style="color:#ff6b6b;">Please select the Assigned SDE.</span>';
     return;
   }
 

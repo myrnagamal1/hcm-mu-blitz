@@ -2058,6 +2058,34 @@ function downloadLeadsExcel() {
 function filterLeadsTable() {
   applyDashView();
 }
+
+async function sendOrgNotification() {
+  var input = document.getElementById('notify-msg-input');
+  var btn   = document.getElementById('notify-btn');
+  var status = document.getElementById('notify-status');
+  var msg = (input.value || '').trim();
+  if (!msg) return;
+  btn.disabled = true;
+  status.textContent = 'Sending…';
+  try {
+    var resp = await fetch(WEB_APP_URL + '/notify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: msg })
+    });
+    var data = await resp.json();
+    if (data.sent) {
+      status.textContent = 'Sent!';
+      input.value = '';
+      setTimeout(function(){ status.textContent = ''; }, 3000);
+    } else {
+      status.textContent = 'Error';
+    }
+  } catch(e) {
+    status.textContent = 'Error';
+  }
+  btn.disabled = false;
+}
 </script>
 
 

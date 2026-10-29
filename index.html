@@ -1413,11 +1413,41 @@ function renderLeaderboard(data) {
   const medals = ['🥇','🥈','🥉'];
   const rowClasses = ['rank-1-row','rank-2-row','rank-3-row'];
 
-  tbody.innerHTML = data.map((item, i) => {
-    const pct = maxLeads > 0 ? Math.round((item.leads / maxLeads) * 100) : 0;
+  // Re-sort by % of target if target data is available
+  const globalTgt = getGlobalTarget();
+  const enriched = data.map(item => {
+    const att = getAtt(item.partner);
+    const totalTarget = att * globalTgt;
+    const targetPct = totalTarget > 0 ? item.leads / totalTarget * 100 : null;
+    return { ...item, att, totalTarget, targetPct };
+  });
+  // Sort: if any partner has a target, sort by % desc; else keep raw leads order
+  const hasTargets = enriched.some(e => e.targetPct !== null);
+  if (hasTargets) {
+    enriched.sort((a, b) => {
+      // Partners with target go first, sorted by %; no-target partners sorted by leads
+      if (a.targetPct !== null && b.targetPct !== null) return b.targetPct - a.targetPct;
+      if (a.targetPct !== null) return -1;
+      if (b.targetPct !== null) return 1;
+      return b.leads - a.leads;
+    });
+  }
+
+  tbody.innerHTML = enriched.map((item, i) => {
     const rankClass = i < 3 ? rowClasses[i] : '';
     const badgeClass = i < 3 ? `rank-${i+1}` : 'rank-n';
     const badgeContent = i < 3 ? medals[i] : (i + 1);
+    // Bar width: % of target if available, else relative to max leads
+    const barW = item.targetPct !== null
+      ? Math.min(item.targetPct, 100).toFixed(1)
+      : maxLeads > 0 ? Math.round((item.leads / maxLeads) * 100) : 0;
+    const barColor = item.targetPct !== null
+      ? (item.targetPct >= 100 ? '#4ade80' : item.targetPct >= 60 ? '#f97316' : null)
+      : null;
+    const barStyle = barColor ? `background:${barColor};` : '';
+    const pctLabel = item.targetPct !== null
+      ? `<div class="leads-label" style="color:${barColor || 'rgba(255,255,255,0.45)'};">${Math.round(item.targetPct)}% of target</div>`
+      : `<div class="leads-label">leads</div>`;
 
     return `
     <tr class="lb-row ${rankClass}">
@@ -1425,12 +1455,12 @@ function renderLeaderboard(data) {
       <td><div class="partner-name">${item.partner}</div></td>
       <td>
         <div class="progress-bar">
-          <div class="progress-fill" style="transform:scaleX(${pct/100})"></div>
+          <div class="progress-fill" style="transform:scaleX(${barW/100});${barStyle}"></div>
         </div>
       </td>
       <td>
         <div class="leads-count">${item.leads}</div>
-        <div class="leads-label">leads</div>
+        ${pctLabel}
       </td>
     </tr>`;
   }).join('');

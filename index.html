@@ -1007,6 +1007,15 @@
           </div>
         </div>
 
+        <!-- Website -->
+        <div class="lf-group">
+          <label class="lf-label">Website <span class="lf-req">*</span></label>
+          <input id="lf-website" type="url" class="lf-input" placeholder="https://company.com">
+          <div id="lf-website-warn" class="lf-warn" style="display:none;">
+            ⚠️ Please enter the company website.
+          </div>
+        </div>
+
         <!-- Industry -->
         <div class="lf-group">
           <label class="lf-label">Industry <span class="lf-req">*</span></label>
@@ -1673,6 +1682,7 @@ function lfPhoneBlur() {
 
 function lfEmailInput() {
   document.getElementById('lf-email-warn').style.display = 'none';
+        document.getElementById('lf-website-warn').style.display = 'none';
 }
 
 function lfEmailBlur() {
@@ -1690,6 +1700,7 @@ function lfSubmit() {
   const title    = document.getElementById('lf-title').value.trim();
   const phone    = document.getElementById('lf-phone').value.trim();
   const email    = document.getElementById('lf-email').value.trim();
+  const website  = document.getElementById('lf-website').value.trim();
   const industry = document.getElementById('lf-industry').value.trim();
   const outcome  = document.getElementById('lf-outcome').value.trim();
   const nextstep = document.getElementById('lf-nextstep').value.trim();
@@ -1699,7 +1710,7 @@ function lfSubmit() {
   const status   = document.getElementById('lf-status');
   const btn      = document.getElementById('lf-btn');
 
-  if (!partner || !rep || !account || !contact || !title || !phone || !industry || !outcome || !nextstep || !ai) {
+  if (!partner || !rep || !account || !contact || !title || !phone || !website || !industry || !outcome || !nextstep || !ai) {
     status.innerHTML = '<span style="color:#ff6b6b;">Please fill in all required fields.</span>';
     return;
   }
@@ -1708,6 +1719,13 @@ function lfSubmit() {
   if (phone && !PHONE_REGEX.test(phone)) {
     document.getElementById('lf-phone-warn').style.display = 'flex';
     status.innerHTML = '<span style="color:#ff6b6b;">Please fix the phone number before submitting.</span>';
+    return;
+  }
+
+  // Validate website
+  if (!website) {
+    document.getElementById('lf-website-warn').style.display = 'flex';
+    status.innerHTML = '<span style="color:#ff6b6b;">Please enter the company website.</span>';
     return;
   }
 
@@ -1729,7 +1747,7 @@ function lfSubmit() {
   fetch(WEB_APP_URL + '/leads', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ partner, rep, account, contact, title, phone, email, industry, outcome, nextstep, ai, notes, sde,
+    body: JSON.stringify({ partner, rep, account, contact, title, phone, email, website, industry, outcome, nextstep, ai, notes, sde,
       onMaster: onMaster ? 'YES' : 'NO — not on master list' })
   })
     .then(r => r.json())
@@ -1737,7 +1755,7 @@ function lfSubmit() {
       if (d.status === 'ok' || d.result === 'success') {
         playSuccessSound();
         status.innerHTML = '<span style="color:#00C8D4;font-weight:700;">✓ Lead submitted successfully!</span>';
-        ['lf-rep','lf-account','lf-contact','lf-title','lf-phone','lf-email','lf-nextstep','lf-notes'].forEach(id =>
+        ['lf-rep','lf-account','lf-contact','lf-title','lf-phone','lf-email','lf-website','lf-nextstep','lf-notes'].forEach(id =>
           document.getElementById(id).value = '');
         document.getElementById('lf-outcome').value = '';
         document.getElementById('lf-industry').value = '';
@@ -1746,6 +1764,7 @@ function lfSubmit() {
         document.getElementById('lf-account-warn').style.display = 'none';
         document.getElementById('lf-account-ok').style.display   = 'none';
         document.getElementById('lf-email-warn').style.display = 'none';
+        document.getElementById('lf-website-warn').style.display = 'none';
         lfCurrentAccounts = [];
       } else {
         status.innerHTML = '<span style="color:#ff6b6b;">Submission failed — please try again.</span>';

@@ -1450,6 +1450,8 @@ setInterval(loadLeaderboard, REFRESH_INTERVAL);
       if (data.event === 'new-lead') {
         playSuccessSound();
         showLeadPopup(data.partner, data.account);
+      } else if (data.event === 'organiser-notify') {
+        showOrgNotification(data.message);
       }
     } catch(_) {}
   };

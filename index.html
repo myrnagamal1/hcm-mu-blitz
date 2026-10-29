@@ -1503,6 +1503,23 @@ setInterval(loadLeaderboard, REFRESH_INTERVAL);
     </div>
   </div>
 
+
+  <!-- Organiser Notify Panel -->
+  <div style="background:rgba(255,195,0,0.06);border:1px solid rgba(255,195,0,0.25);border-radius:14px;padding:20px 24px;margin-bottom:36px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+    <span style="font-size:22px;">&#x1F4E3;</span>
+    <div style="flex:1;min-width:200px;">
+      <div style="font-size:0.78rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Notify All Attendees</div>
+      <input id="notify-msg-input" type="text" placeholder="Type your announcement&hellip;"
+        style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,195,0,0.3);border-radius:8px;padding:10px 14px;color:#fff;font-size:0.9rem;outline:none;"
+        onkeydown="if(event.key==='Enter')sendOrgNotification()">
+    </div>
+    <button onclick="sendOrgNotification()" id="notify-btn"
+      style="padding:10px 20px;border-radius:8px;background:var(--gold);color:#000;font-weight:700;border:none;cursor:pointer;font-size:0.9rem;">
+      Send &#x27A4;
+    </button>
+    <span id="notify-status" style="font-size:0.8rem;color:var(--gold);min-width:60px;"></span>
+  </div>
+
   <!-- Stats cards -->
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:40px;" id="dash-stats">
     <div class="dash-stat-card" style="background:rgba(0,158,167,0.12);border:1px solid rgba(0,158,167,0.3);border-radius:14px;padding:22px 20px;">
@@ -1870,19 +1887,26 @@ function playSuccessSound() {
 
 var _toastTimer = null;
 function showLeadPopup(partner, account) {
+  showToast('&#x1F44F;', 'NEW LEAD!', partner ? partner + ' just submitted a lead!' : 'A new lead was just submitted!');
+}
+function closeLeadToast() { closeToast(); }
+function showOrgNotification(message) {
+  showToast('&#x1F4E3;', 'ANNOUNCEMENT', message);
+}
+function showToast(emoji, title, msg) {
   var toast = document.getElementById('lead-toast');
-  var msg   = document.getElementById('lt-msg');
-  msg.textContent = partner ? partner + ' just submitted a lead!' : 'A new lead was just submitted!';
-  // Reset progress bar animation
+  toast.querySelector('.lt-emoji').innerHTML = emoji;
+  toast.querySelector('.lt-title').textContent = title;
+  document.getElementById('lt-msg').textContent = msg;
   var prog = document.getElementById('lt-progress');
   prog.style.animation = 'none';
-  prog.offsetHeight; // reflow
+  prog.offsetHeight;
   prog.style.animation = 'lt-shrink 4s linear forwards';
   toast.classList.add('show');
   if (_toastTimer) clearTimeout(_toastTimer);
-  _toastTimer = setTimeout(closeLeadToast, 4200);
+  _toastTimer = setTimeout(closeToast, 4200);
 }
-function closeLeadToast() {
+function closeToast() {
   document.getElementById('lead-toast').classList.remove('show');
 }
 

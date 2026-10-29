@@ -1390,8 +1390,13 @@ function renderLeaderboard(data) {
   // Update stat
   document.getElementById('total-leads-stat').textContent = totalLeads;
 
-  // Update target of the day
-  const TARGET = LEAD_TARGET;
+  // Update target of the day — use total attendees × global target/person if set
+  const _gTgt = getGlobalTarget();
+  const _totalAtt = PARTNERS.reduce((s, p) => s + getAtt(p), 0);
+  const TARGET = (_gTgt > 0 && _totalAtt > 0) ? (_totalAtt * _gTgt) : LEAD_TARGET;
+  // Show the computed goal in the header
+  const _goalEl = document.getElementById('lb-target-goal');
+  if (_goalEl) _goalEl.textContent = TARGET;
   const pctTarget = Math.min(Math.round((totalLeads / TARGET) * 100), 100);
   document.getElementById('lb-target-count').textContent = totalLeads;
   document.getElementById('lb-target-bar').style.transform = 'scaleX(' + (pctTarget / 100) + ')';

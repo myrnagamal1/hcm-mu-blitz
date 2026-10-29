@@ -1617,6 +1617,11 @@ setInterval(loadLeaderboard, REFRESH_INTERVAL);
 let dashAllRows = [];
 let dashExcluded = new Set(JSON.parse(sessionStorage.getItem('dashExcluded') || '[]'));
 let dashInterval = null;
+
+// Partner attendee counts — persisted in localStorage per event
+const ATTENDEE_KEY = 'partnerAttendees_' + WEB_APP_URL.split('/').pop();
+let partnerAttendees = JSON.parse(localStorage.getItem(ATTENDEE_KEY) || '{}');
+function saveAttendees() { localStorage.setItem(ATTENDEE_KEY, JSON.stringify(partnerAttendees)); }
 let dashActiveTab = 'all';
 
 function renderDashTabs() {
@@ -1706,14 +1711,27 @@ function renderDashStats(rows) {
   const maxLeads = lb.length > 0 ? Math.max(...lb.map(d => d.leads), 1) : 1;
   document.getElementById('dash-partner-bars').innerHTML = lb.length === 0
     ? '<p style="color:rgba(255,255,255,0.35);font-size:0.85rem;margin:0;">No leads yet.</p>'
-    : lb.map(item => `
-      <div class="dash-partner-row">
+    : lb.map(item => {
+        const att = partnerAttendees[item.partner] || 0;
+        const lpa = att > 0 ? (item.leads / att).toFixed(2) : null;
+        const attPct = att > 0 ? Math.min(item.leads / att * 100, 100) : 0;
+        const attColor = attPct >= 100 ? '#4ade80' : attPct >= 60 ? 'var(--gold)' : 'var(--teal2)';
+        return `
+      <div class="dash-partner-row" style="margin-bottom:10px;">
         <div class="dash-partner-label" title="${item.partner}">${item.partner}</div>
         <div class="dash-partner-track">
           <div class="dash-partner-fill" style="transform:scaleX(${Math.round((item.leads/maxLeads)*100)/100})"></div>
         </div>
         <div class="dash-partner-count">${item.leads}</div>
-      </div>`).join('');
+        <div style="display:flex;align-items:center;gap:6px;margin-left:12px;">
+          <input type="number" min="0" placeholder="Att." title="Number of attendees for ${item.partner}"
+            value="${att || ''}"
+            onchange="partnerAttendees['${item.partner.replace(/'/g,"\\'")}'] = parseInt(this.value)||0; saveAttendees(); renderDash();"
+            style="width:58px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);border-radius:6px;padding:4px 7px;color:#fff;font-size:0.78rem;text-align:center;outline:none;">
+          ${att > 0 ? `<span title="Leads per attendee" style="font-size:0.75rem;font-weight:700;color:${attColor};min-width:52px;text-align:right;">${lpa}/att</span>` : '<span style="font-size:0.72rem;color:rgba(255,255,255,0.25);min-width:52px;"></span>'}
+        </div>
+      </div>`;
+      }).join('');
 }
 
 // ── LEAD FORM ──────────────────────────────────────────

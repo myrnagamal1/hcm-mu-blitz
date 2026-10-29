@@ -1621,7 +1621,12 @@ let dashInterval = null;
 // Partner attendee counts — persisted in localStorage per event
 const ATTENDEE_KEY = 'partnerAttendees_' + WEB_APP_URL.split('/').pop();
 let partnerAttendees = JSON.parse(localStorage.getItem(ATTENDEE_KEY) || '{}');
+// partnerAttendees[name] = { att: N, target: N }
 function saveAttendees() { localStorage.setItem(ATTENDEE_KEY, JSON.stringify(partnerAttendees)); }
+function getAtt(name)    { return (partnerAttendees[name] || {}).att    || 0; }
+function getTarget(name) { return (partnerAttendees[name] || {}).target || 0; }
+function setAtt(name, v)    { if (!partnerAttendees[name]) partnerAttendees[name] = {}; partnerAttendees[name].att    = v; saveAttendees(); renderDash(); }
+function setTarget(name, v) { if (!partnerAttendees[name]) partnerAttendees[name] = {}; partnerAttendees[name].target = v; saveAttendees(); renderDash(); }
 let dashActiveTab = 'all';
 
 function renderDashTabs() {
@@ -1712,23 +1717,38 @@ function renderDashStats(rows) {
   document.getElementById('dash-partner-bars').innerHTML = lb.length === 0
     ? '<p style="color:rgba(255,255,255,0.35);font-size:0.85rem;margin:0;">No leads yet.</p>'
     : lb.map(item => {
-        const att = partnerAttendees[item.partner] || 0;
-        const lpa = att > 0 ? (item.leads / att).toFixed(2) : null;
-        const attPct = att > 0 ? Math.min(item.leads / att * 100, 100) : 0;
-        const attColor = attPct >= 100 ? '#4ade80' : attPct >= 60 ? 'var(--gold)' : 'var(--teal2)';
+        const pname = item.partner.replace(/'/g, "\'").replace(/</g, '&lt;');
+        const att    = getAtt(item.partner);
+        const tgt    = getTarget(item.partner);
+        const totalTarget = att * tgt;
+        const pct    = totalTarget > 0 ? Math.min(item.leads / totalTarget * 100, 100) : 0;
+        const barColor = pct >= 100 ? '#4ade80' : pct >= 60 ? 'var(--gold)' : 'var(--teal2)';
+        const progressBlock = totalTarget > 0 ? `
+          <div style="display:flex;align-items:center;gap:8px;min-width:200px;">
+            <div style="flex:1;height:6px;background:rgba(255,255,255,0.1);border-radius:3px;overflow:hidden;">
+              <div style="height:100%;width:${pct.toFixed(1)}%;background:${barColor};border-radius:3px;transition:width 0.4s;"></div>
+            </div>
+            <span style="font-size:0.78rem;font-weight:700;color:${barColor};white-space:nowrap;">${item.leads}/${totalTarget} <span style="font-weight:400;color:rgba(255,255,255,0.4);">(${Math.round(pct)}%)</span></span>
+          </div>` : '<div style="min-width:200px;font-size:0.72rem;color:rgba(255,255,255,0.25);">Set attendees &amp; target \u2192</div>';
         return `
-      <div class="dash-partner-row" style="margin-bottom:10px;">
+      <div class="dash-partner-row" style="margin-bottom:12px;align-items:center;">
         <div class="dash-partner-label" title="${item.partner}">${item.partner}</div>
         <div class="dash-partner-track">
           <div class="dash-partner-fill" style="transform:scaleX(${Math.round((item.leads/maxLeads)*100)/100})"></div>
         </div>
         <div class="dash-partner-count">${item.leads}</div>
         <div style="display:flex;align-items:center;gap:6px;margin-left:12px;">
-          <input type="number" min="0" placeholder="Att." title="Number of attendees for ${item.partner}"
+          <label style="font-size:0.7rem;color:rgba(255,255,255,0.4);white-space:nowrap;">Att.</label>
+          <input type="number" min="0" placeholder="0" title="Attendees for ${item.partner}"
             value="${att || ''}"
-            onchange="partnerAttendees['${item.partner.replace(/'/g,"\\'")}'] = parseInt(this.value)||0; saveAttendees(); renderDash();"
-            style="width:58px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);border-radius:6px;padding:4px 7px;color:#fff;font-size:0.78rem;text-align:center;outline:none;">
-          ${att > 0 ? `<span title="Leads per attendee" style="font-size:0.75rem;font-weight:700;color:${attColor};min-width:52px;text-align:right;">${lpa}/att</span>` : '<span style="font-size:0.72rem;color:rgba(255,255,255,0.25);min-width:52px;"></span>'}
+            onchange="setAtt('${pname}', parseInt(this.value)||0)"
+            style="width:52px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);border-radius:6px;padding:4px 6px;color:#fff;font-size:0.78rem;text-align:center;outline:none;">
+          <label style="font-size:0.7rem;color:rgba(255,255,255,0.4);white-space:nowrap;">Tgt/att</label>
+          <input type="number" min="0" placeholder="0" title="Lead target per attendee for ${item.partner}"
+            value="${tgt || ''}"
+            onchange="setTarget('${pname}', parseInt(this.value)||0)"
+            style="width:52px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.18);border-radius:6px;padding:4px 6px;color:#fff;font-size:0.78rem;text-align:center;outline:none;">
+          ${progressBlock}
         </div>
       </div>`;
       }).join('');

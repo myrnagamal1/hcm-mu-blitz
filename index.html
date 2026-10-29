@@ -1628,11 +1628,18 @@ let dashInterval = null;
 
 // Partner attendee counts + global target — persisted in localStorage per event
 const ATTENDEE_KEY = 'partnerAttendees_' + WEB_APP_URL.split('/').pop();
-let partnerAttendees = JSON.parse(localStorage.getItem(ATTENDEE_KEY) || '{}');
-// partnerAttendees._globalTarget = N  (leads per person, same for all)
-// partnerAttendees[name] = N  (attendee count)
+let partnerAttendees = (function() {
+  var raw = JSON.parse(localStorage.getItem(ATTENDEE_KEY) || '{}');
+  // Migrate old format {name:{att:N}} -> {name:N}
+  Object.keys(raw).forEach(function(k) {
+    if (k !== '_globalTarget' && raw[k] && typeof raw[k] === 'object') {
+      raw[k] = raw[k].att || 0;
+    }
+  });
+  return raw;
+})();
 function saveAttendees() { localStorage.setItem(ATTENDEE_KEY, JSON.stringify(partnerAttendees)); }
-function getAtt(name)    { return partnerAttendees[name] || 0; }
+function getAtt(name)    { var v = partnerAttendees[name]; return (v && typeof v === 'object') ? (v.att||0) : (v||0); }
 function getGlobalTarget() { return partnerAttendees._globalTarget || 0; }
 function setAtt(name, v)    { partnerAttendees[name] = v; saveAttendees(); renderDash(); }
 function setGlobalTarget(v) { partnerAttendees._globalTarget = v; saveAttendees(); renderDash(); }

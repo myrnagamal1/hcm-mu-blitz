@@ -1904,9 +1904,7 @@ function playSuccessSound() {
 function showLeadPopup(partner, account) {
   var popup = document.getElementById('lead-success-popup');
   var sub = document.querySelector('.lsp-sub');
-  if (partner && account) {
-    sub.textContent = partner + ' just submitted ' + account + '!';
-  } else if (partner) {
+  if (partner) {
     sub.textContent = partner + ' just submitted a lead!';
   } else {
     sub.textContent = 'Great work — keep the momentum going!';

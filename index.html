@@ -1149,9 +1149,12 @@
         <div class="section-tag">Live Rankings</div>
         <h2 class="section-title">🏆 <span class="gold">Leaderboard</span></h2>
       </div>
-      <button class="refresh-btn" onclick="loadLeaderboard(true)">
+      <div style="display:flex;gap:10px;align-items:center;">
+        <button class="refresh-btn" onclick="loadLeaderboard(true)">
         <span class="spin">↻</span> Refresh Now
       </button>
+        <button class="refresh-btn" onclick="enterPresentMode()" style="background:rgba(0,200,212,0.15);border-color:rgba(0,200,212,0.5);">&#x26A1; Present</button>
+      </div>
     </div>
 
     <div class="lb-updated" id="lb-updated">Loading…</div>
@@ -1469,6 +1472,7 @@ function renderLeaderboard(data) {
       </td>
     </tr>`;
   }).join('');
+  updatePresentMode();
 }
 
 // Initial load + auto-refresh
@@ -2031,6 +2035,50 @@ function playChimeSound() {
 }
 
 var _toastTimer = null;
+function enterPresentMode() {
+  var o = document.getElementById("present-overlay");
+  o.style.display = "flex";
+  var n = document.getElementById("pm-event-name");
+  if (n) n.textContent = (typeof EVENT_NAME !== "undefined") ? EVENT_NAME : "";
+  updatePresentMode();
+  if (o.requestFullscreen) o.requestFullscreen().catch(function(){});
+  else if (o.webkitRequestFullscreen) o.webkitRequestFullscreen();
+}
+function exitPresentMode() {
+  document.getElementById("present-overlay").style.display = "none";
+  if (document.exitFullscreen) document.exitFullscreen().catch(function(){});
+  else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+}
+function updatePresentMode() {
+  var o = document.getElementById("present-overlay");
+  if (!o || o.style.display === "none") return;
+  var srcBar = document.getElementById("lb-target-bar");
+  var pmBar  = document.getElementById("pm-target-bar");
+  if (srcBar && pmBar) {
+    var m = srcBar.style.transform.match(/scaleX\(([^)]+)\)/);
+    pmBar.style.width = m ? (parseFloat(m[1])*100).toFixed(1)+"%" : "0%";
+  }
+  var s = document.getElementById("lb-target-msg");
+  var p = document.getElementById("pm-target-label");
+  if (s && p) p.textContent = s.textContent;
+  var src = document.getElementById("lb-body");
+  var dst = document.getElementById("pm-lb-body");
+  if (!src || !dst) return;
+  dst.innerHTML = '<table style="width:100%;border-collapse:separate;border-spacing:0 14px;">'
+    + '<thead><tr>'
+    + '<th style="width:80px;font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.35);padding:0 12px 8px;text-align:left;">Rank</th>'
+    + '<th style="font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.35);padding:0 12px 8px;text-align:left;">Partner</th>'
+    + '<th style="font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.35);padding:0 12px 8px;text-align:left;">Progress</th>'
+    + '<th style="width:140px;font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.35);padding:0 12px 8px;text-align:right;">Leads</th>'
+    + '</tr></thead>'
+    + '<tbody>' + src.innerHTML + '</tbody></table>';
+  dst.querySelectorAll(".lb-row td").forEach(function(el){el.style.fontSize="1.15rem";el.style.padding="16px 12px";});
+  dst.querySelectorAll(".partner-name").forEach(function(el){el.style.fontSize="1.3rem";el.style.fontWeight="700";});
+  dst.querySelectorAll(".leads-count").forEach(function(el){el.style.fontSize="1.6rem";el.style.fontWeight="900";});
+  dst.querySelectorAll(".leads-label").forEach(function(el){el.style.fontSize="0.82rem";});
+  dst.querySelectorAll(".rank-badge").forEach(function(el){el.style.fontSize="1.3rem";el.style.width="48px";el.style.height="48px";el.style.lineHeight="48px";});
+  dst.querySelectorAll(".progress-bar").forEach(function(el){el.style.height="14px";});
+}
 function showLeadPopup(partner, account) {
   showToast('&#x1F44F;', 'NEW LEAD!', partner ? partner + ' just submitted a lead!' : 'A new lead was just submitted!');
 }
@@ -2243,6 +2291,29 @@ async function sendOrgNotification() {
   </div>
   <button class="lt-close" onclick="closeLeadToast()">&#x2715;</button>
   <div class="lt-progress" id="lt-progress"></div>
+</div>
+
+<!-- Present Mode Overlay -->
+<div id="present-overlay" style="display:none;position:fixed;inset:0;background:#060f1a;z-index:99999;flex-direction:column;overflow:hidden;">
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:24px 48px 0;">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <span style="font-size:2rem;">&#x1F3C6;</span>
+      <div>
+        <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.12em;color:var(--teal);text-transform:uppercase;">Live Rankings</div>
+        <div id="pm-event-name" style="font-size:1.6rem;font-weight:900;color:#fff;"></div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <div id="pm-target-label" style="font-size:1rem;color:rgba(255,255,255,0.55);"></div>
+      <button onclick="exitPresentMode()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px 22px;color:#fff;font-size:0.9rem;cursor:pointer;font-weight:600;">Exit</button>
+    </div>
+  </div>
+  <div style="padding:16px 48px 0;">
+    <div style="height:10px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden;">
+      <div id="pm-target-bar" style="height:100%;border-radius:99px;background:linear-gradient(90deg,var(--teal),var(--gold));width:0%;transition:width 0.6s;"></div>
+    </div>
+  </div>
+  <div id="pm-lb-body" style="flex:1;overflow-y:auto;padding:24px 48px 48px;"></div>
 </div>
 </body>
 </html>

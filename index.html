@@ -2036,48 +2036,99 @@ function playChimeSound() {
 
 var _toastTimer = null;
 function enterPresentMode() {
-  var o = document.getElementById("present-overlay");
-  o.style.display = "flex";
-  var n = document.getElementById("pm-event-name");
-  if (n) n.textContent = (typeof EVENT_NAME !== "undefined") ? EVENT_NAME : "";
+  var o = document.getElementById('present-overlay');
+  o.style.display = 'flex';
+  var n = document.getElementById('pm-event-name');
+  if (n) n.textContent = (typeof EVENT_NAME !== 'undefined') ? EVENT_NAME : '';
   updatePresentMode();
   if (o.requestFullscreen) o.requestFullscreen().catch(function(){});
   else if (o.webkitRequestFullscreen) o.webkitRequestFullscreen();
 }
 function exitPresentMode() {
-  document.getElementById("present-overlay").style.display = "none";
+  document.getElementById('present-overlay').style.display = 'none';
   if (document.exitFullscreen) document.exitFullscreen().catch(function(){});
   else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
 }
 function updatePresentMode() {
-  var o = document.getElementById("present-overlay");
-  if (!o || o.style.display === "none") return;
-  var srcBar = document.getElementById("lb-target-bar");
-  var pmBar  = document.getElementById("pm-target-bar");
+  var o = document.getElementById('present-overlay');
+  if (!o || o.style.display === 'none') return;
+  var srcBar = document.getElementById('lb-target-bar');
+  var pmBar  = document.getElementById('pm-target-bar');
   if (srcBar && pmBar) {
-    var m = srcBar.style.transform.match(/scaleX\(([^)]+)\)/);
-    pmBar.style.width = m ? (parseFloat(m[1])*100).toFixed(1)+"%" : "0%";
+    var mx = srcBar.style.transform.match(/scaleX\(([^)]+)\)/);
+    var pct = mx ? parseFloat(mx[1])*100 : 0;
+    pmBar.style.width = pct.toFixed(1) + '%';
+    var pctEl = document.getElementById('pm-target-pct');
+    if (pctEl) pctEl.textContent = Math.round(pct) + '%';
   }
-  var s = document.getElementById("lb-target-msg");
-  var p = document.getElementById("pm-target-label");
+  var s = document.getElementById('lb-target-msg');
+  var p = document.getElementById('pm-target-msg');
   if (s && p) p.textContent = s.textContent;
-  var src = document.getElementById("lb-body");
-  var dst = document.getElementById("pm-lb-body");
+  var cntEl = document.getElementById('lb-target-count');
+  var pmCnt = document.getElementById('pm-lead-count');
+  if (cntEl && pmCnt) pmCnt.textContent = cntEl.textContent;
+  var src = document.getElementById('lb-body');
+  var dst = document.getElementById('pm-lb-body');
   if (!src || !dst) return;
-  dst.innerHTML = '<table style="width:100%;border-collapse:separate;border-spacing:0 14px;">'
-    + '<thead><tr>'
-    + '<th style="width:80px;font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.35);padding:0 12px 8px;text-align:left;">Rank</th>'
-    + '<th style="font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.35);padding:0 12px 8px;text-align:left;">Partner</th>'
-    + '<th style="font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.35);padding:0 12px 8px;text-align:left;">Progress</th>'
-    + '<th style="width:140px;font-size:0.72rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.35);padding:0 12px 8px;text-align:right;">Leads</th>'
-    + '</tr></thead>'
-    + '<tbody>' + src.innerHTML + '</tbody></table>';
-  dst.querySelectorAll(".lb-row td").forEach(function(el){el.style.fontSize="1.15rem";el.style.padding="16px 12px";});
-  dst.querySelectorAll(".partner-name").forEach(function(el){el.style.fontSize="1.3rem";el.style.fontWeight="700";});
-  dst.querySelectorAll(".leads-count").forEach(function(el){el.style.fontSize="1.6rem";el.style.fontWeight="900";});
-  dst.querySelectorAll(".leads-label").forEach(function(el){el.style.fontSize="0.82rem";});
-  dst.querySelectorAll(".rank-badge").forEach(function(el){el.style.fontSize="1.3rem";el.style.width="48px";el.style.height="48px";el.style.lineHeight="48px";});
-  dst.querySelectorAll(".progress-bar").forEach(function(el){el.style.height="14px";});
+  var rows = src.querySelectorAll('tr.lb-row');
+  var rankColors = ['#FFD700','#C0C0C0','#CD7F32'];
+  var rankGlows  = ['0 0 40px rgba(255,215,0,0.5)','0 0 24px rgba(192,192,192,0.35)','0 0 18px rgba(205,127,50,0.35)'];
+  var rankBg     = ['linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,165,0,0.04))','linear-gradient(135deg,rgba(192,192,192,0.08),rgba(160,160,160,0.03))','linear-gradient(135deg,rgba(205,127,50,0.08),rgba(180,100,20,0.03))'];
+  var out = '';
+  rows.forEach(function(row, i) {
+    var partnerEl = row.querySelector('.partner-name');
+    var countEl   = row.querySelector('.leads-count');
+    var labelEl   = row.querySelector('.leads-label');
+    var fillEl    = row.querySelector('.progress-fill');
+    var badgeEl   = row.querySelector('.rank-badge');
+    if (!partnerEl || !countEl) return;
+    var partner  = partnerEl.textContent.trim();
+    var leads    = countEl.textContent.trim();
+    var label    = labelEl ? labelEl.innerHTML.trim() : 'leads';
+    var fillW    = fillEl ? fillEl.style.transform : 'scaleX(0)';
+    var badge    = badgeEl ? badgeEl.innerHTML.trim() : (i+1);
+    var m2       = fillW.match(/scaleX\(([^)]+)\)/);
+    var barPct   = m2 ? (parseFloat(m2[1])*100).toFixed(1) : '0';
+    var isTop    = i < 3;
+    var color    = isTop ? rankColors[i] : 'rgba(0,200,212,0.9)';
+    var glow     = isTop ? rankGlows[i] : 'none';
+    var bg       = isTop ? rankBg[i] : 'rgba(255,255,255,0.025)';
+    var border   = isTop ? color : 'rgba(255,255,255,0.06)';
+    var barGrad  = isTop
+      ? 'linear-gradient(90deg,' + color + ',rgba(255,255,255,0.7))'
+      : 'linear-gradient(90deg,var(--teal),var(--gold))';
+    var delay    = (i * 0.07) + 's';
+    out += '<div style="'
+      + 'display:grid;grid-template-columns:60px 1fr 100px;'
+      + 'align-items:center;gap:24px;'
+      + 'background:' + bg + ';'
+      + 'border:1px solid ' + border + ';'
+      + 'border-left:3px solid ' + color + ';'
+      + 'border-radius:14px;padding:16px 24px;margin-bottom:10px;'
+      + 'box-shadow:' + glow + ';'
+      + 'animation:pmSlideIn 0.5s cubic-bezier(0.22,1,0.36,1) both;'
+      + 'animation-delay:' + delay + ';"'
+      + ' class="pm-row">'
+      + '<div style="text-align:center;">'
+      +   '<div style="font-size:' + (isTop ? '2rem' : '1.1rem') + ';line-height:1;'
+      +     'filter:drop-shadow(0 0 8px ' + color + ');">' + badge + '</div>'
+      + '</div>'
+      + '<div>'
+      +   '<div style="font-size:1.25rem;font-weight:800;color:#fff;letter-spacing:0.01em;margin-bottom:8px;text-shadow:0 1px 8px rgba(0,0,0,0.5);">' + partner + '</div>'
+      +   '<div style="background:rgba(255,255,255,0.07);border-radius:99px;height:8px;overflow:hidden;">'
+      +     '<div style="height:100%;width:' + barPct + '%;background:' + barGrad + ';'
+      +       'border-radius:99px;transition:width 1s cubic-bezier(0.34,1.2,0.64,1);'
+      +       'box-shadow:0 0 8px ' + color + ';"></div>'
+      +   '</div>'
+      + '</div>'
+      + '<div style="text-align:right;">'
+      +   '<div style="font-size:2.2rem;font-weight:900;color:' + color + ';'
+      +     'line-height:1;text-shadow:0 0 16px ' + color + ';letter-spacing:-0.02em;">' + leads + '</div>'
+      +   '<div style="font-size:0.7rem;color:rgba(255,255,255,0.35);margin-top:3px;">' + label + '</div>'
+      + '</div>'
+      + '</div>';
+  });
+  dst.innerHTML = out;
 }
 function showLeadPopup(partner, account) {
   showToast('&#x1F44F;', 'NEW LEAD!', partner ? partner + ' just submitted a lead!' : 'A new lead was just submitted!');
@@ -2293,27 +2344,49 @@ async function sendOrgNotification() {
   <div class="lt-progress" id="lt-progress"></div>
 </div>
 
-<!-- Present Mode Overlay -->
-<div id="present-overlay" style="display:none;position:fixed;inset:0;background:#060f1a;z-index:99999;flex-direction:column;overflow:hidden;">
-  <div style="display:flex;align-items:center;justify-content:space-between;padding:24px 48px 0;">
-    <div style="display:flex;align-items:center;gap:16px;">
-      <span style="font-size:2rem;">&#x1F3C6;</span>
+<!-- Present Mode Overlay (Gamified) -->
+<style>
+@keyframes pmSlideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes scanline{0%{transform:translateY(-100%)}100%{transform:translateY(100vh)}}
+@keyframes pmFlash{0%{background:rgba(0,200,212,0.2);box-shadow:0 0 40px rgba(0,200,212,0.3)}100%{background:transparent;box-shadow:none}}
+#pm-lb-body::-webkit-scrollbar{display:none}
+.pm-row-flash{animation:pmFlash 1s ease-out !important}
+</style>
+<div id="present-overlay" style="display:none;position:fixed;inset:0;z-index:99999;flex-direction:column;overflow:hidden;background:#020b14;">
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(0,200,212,0.1) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 90% 110%,rgba(255,180,0,0.07) 0%,transparent 60%);pointer-events:none;"></div>
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,200,212,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,212,0.03) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;"></div>
+  <div style="position:absolute;left:0;right:0;height:200px;background:linear-gradient(transparent,rgba(0,200,212,0.04),transparent);animation:scanline 5s linear infinite;pointer-events:none;"></div>
+  <div style="position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;padding:28px 52px 0;">
+    <div style="display:flex;align-items:center;gap:20px;">
+      <div style="font-size:2.8rem;filter:drop-shadow(0 0 16px gold);">&#x1F3C6;</div>
       <div>
-        <div style="font-size:0.72rem;font-weight:700;letter-spacing:0.12em;color:var(--teal);text-transform:uppercase;">Live Rankings</div>
-        <div id="pm-event-name" style="font-size:1.6rem;font-weight:900;color:#fff;"></div>
+        <div style="font-size:0.62rem;font-weight:800;letter-spacing:0.25em;color:var(--teal);text-transform:uppercase;margin-bottom:4px;">Live Leaderboard</div>
+        <div id="pm-event-name" style="font-size:1.8rem;font-weight:900;color:#fff;letter-spacing:-0.02em;text-shadow:0 0 30px rgba(0,200,212,0.35);"></div>
       </div>
     </div>
-    <div style="display:flex;align-items:center;gap:20px;">
-      <div id="pm-target-label" style="font-size:1rem;color:rgba(255,255,255,0.55);"></div>
-      <button onclick="exitPresentMode()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);border-radius:10px;padding:10px 22px;color:#fff;font-size:0.9rem;cursor:pointer;font-weight:600;">Exit</button>
+    <div style="display:flex;align-items:center;gap:36px;">
+      <div style="text-align:center;">
+        <div id="pm-lead-count" style="font-size:3.2rem;font-weight:900;color:var(--gold);line-height:1;text-shadow:0 0 28px rgba(255,180,0,0.7);">0</div>
+        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:4px;">Total Leads</div>
+      </div>
+      <div style="width:1px;height:48px;background:rgba(255,255,255,0.1);"></div>
+      <div style="text-align:center;">
+        <div id="pm-target-pct" style="font-size:3.2rem;font-weight:900;color:var(--teal);line-height:1;text-shadow:0 0 28px rgba(0,200,212,0.7);">0%</div>
+        <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:4px;">of Target</div>
+      </div>
+      <div style="width:1px;height:48px;background:rgba(255,255,255,0.1);"></div>
+      <button onclick="exitPresentMode()" style="background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:10px 22px;color:rgba(255,255,255,0.4);font-size:0.8rem;cursor:pointer;font-weight:600;letter-spacing:0.06em;transition:all 0.2s;" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,0.35)'" onmouseout="this.style.color='rgba(255,255,255,0.4)';this.style.borderColor='rgba(255,255,255,0.15)'">&#x2715; EXIT</button>
     </div>
   </div>
-  <div style="padding:16px 48px 0;">
-    <div style="height:10px;background:rgba(255,255,255,0.08);border-radius:99px;overflow:hidden;">
-      <div id="pm-target-bar" style="height:100%;border-radius:99px;background:linear-gradient(90deg,var(--teal),var(--gold));width:0%;transition:width 0.6s;"></div>
+  <div style="position:relative;z-index:1;padding:14px 52px 0;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="flex:1;height:4px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden;">
+        <div id="pm-target-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:99px;transition:width 1s cubic-bezier(0.34,1.2,0.64,1);box-shadow:0 0 10px rgba(0,200,212,0.5);"></div>
+      </div>
+      <div id="pm-target-msg" style="font-size:0.75rem;color:rgba(255,255,255,0.35);white-space:nowrap;"></div>
     </div>
   </div>
-  <div id="pm-lb-body" style="flex:1;overflow-y:auto;padding:24px 48px 48px;"></div>
+  <div id="pm-lb-body" style="position:relative;z-index:1;flex:1;overflow-y:auto;padding:18px 52px 40px;scrollbar-width:none;"></div>
 </div>
 </body>
 </html>

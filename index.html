@@ -1492,7 +1492,7 @@ setInterval(loadLeaderboard, REFRESH_INTERVAL);
         playSuccessSound();
         showLeadPopup(data.partner, data.account);
       } else if (data.event === 'organiser-notify') {
-        playSuccessSound();
+        playAnnouncementSound();
         showOrgNotification(data.message);
       }
     } catch(_) {}
@@ -2028,6 +2028,20 @@ function lfSubmit() {
 
 
 var _clapAudio = null;
+(function() {
+  function _unlockAudio() {
+    if (_clapAudio) {
+      var v = _clapAudio.volume; _clapAudio.volume = 0;
+      _clapAudio.play().then(function(){ _clapAudio.pause(); _clapAudio.currentTime=0; _clapAudio.volume=v||1; }).catch(function(){});
+    }
+    document.removeEventListener('click', _unlockAudio);
+    document.removeEventListener('touchstart', _unlockAudio);
+    document.removeEventListener('keydown', _unlockAudio);
+  }
+  document.addEventListener('click', _unlockAudio);
+  document.addEventListener('touchstart', _unlockAudio);
+  document.addEventListener('keydown', _unlockAudio);
+})();
 function playSuccessSound() {
   try {
     if (!_clapAudio) {
@@ -2045,14 +2059,6 @@ function enterPresentMode() {
   o.style.display = 'flex';
   var n = document.getElementById('pm-event-name');
   if (n) n.textContent = (typeof EVENT_NAME !== 'undefined') ? EVENT_NAME : '';
-  // Silent play on user gesture to unlock audio for this tab
-  if (typeof playSuccessSound === 'function') {
-    var prevVol = _clapAudio ? _clapAudio.volume : 1;
-    if (!_clapAudio) playSuccessSound();
-    _clapAudio.volume = 0;
-    _clapAudio.play().catch(function(){});
-    setTimeout(function(){ if(_clapAudio){ _clapAudio.pause(); _clapAudio.currentTime=0; _clapAudio.volume=prevVol||1; } }, 100);
-  }
   updatePresentMode();
   if (o.requestFullscreen) o.requestFullscreen().catch(function(){});
   else if (o.webkitRequestFullscreen) o.webkitRequestFullscreen();
@@ -2147,6 +2153,22 @@ function updatePresentMode() {
       + '</div>';
   });
   dst.innerHTML = out;
+}
+function playAnnouncementSound() {
+  try {
+    var ctx = new (window.AudioContext || window.webkitAudioContext)();
+    var now = ctx.currentTime;
+    [[880,0],[659,0.25]].forEach(function(pair) {
+      var osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine'; osc.frequency.value = pair[0];
+      var t = now + pair[1];
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.4, t + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.55);
+      osc.start(t); osc.stop(t + 0.56);
+    });
+  } catch(e) {}
 }
 function showLeadPopup(partner, account) {
   showToast('&#x1F44F;', 'NEW LEAD!', partner ? partner + ' just submitted a lead!' : 'A new lead was just submitted!');

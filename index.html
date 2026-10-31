@@ -2030,10 +2030,9 @@ function lfSubmit() {
 var _clapAudio = null;
 (function() {
   function _unlockAudio() {
-    if (_clapAudio) {
-      var v = _clapAudio.volume; _clapAudio.volume = 0;
-      _clapAudio.play().then(function(){ _clapAudio.pause(); _clapAudio.currentTime=0; _clapAudio.volume=v||1; }).catch(function(){});
-    }
+    if (!_clapAudio) playSuccessSound();
+    var v = _clapAudio.volume; _clapAudio.volume = 0;
+    _clapAudio.play().then(function(){ _clapAudio.pause(); _clapAudio.currentTime=0; _clapAudio.volume=v||1; }).catch(function(){});
     document.removeEventListener('click', _unlockAudio);
     document.removeEventListener('touchstart', _unlockAudio);
     document.removeEventListener('keydown', _unlockAudio);
@@ -2177,7 +2176,6 @@ function showLeadPopup(partner, account) {
     confetti({ particleCount: 120, spread: 80, origin: { y: 0.5 }, colors: ['#FFC300','#00C8D4','#ffffff','#FFD700','#009EA7'] });
     setTimeout(function(){ confetti({ particleCount: 60, spread: 120, origin: { x: 0.1, y: 0.6 }, colors: ['#FFC300','#ffffff'] }); }, 200);
     setTimeout(function(){ confetti({ particleCount: 60, spread: 120, origin: { x: 0.9, y: 0.6 }, colors: ['#00C8D4','#ffffff'] }); }, 350);
-    if (_pmSoundOn) playSuccessSound();
   }
 }
 function closeLeadToast() { closeToast(); }

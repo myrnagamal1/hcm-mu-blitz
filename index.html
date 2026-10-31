@@ -2043,9 +2043,14 @@ function enterPresentMode() {
   o.style.display = 'flex';
   var n = document.getElementById('pm-event-name');
   if (n) n.textContent = (typeof EVENT_NAME !== 'undefined') ? EVENT_NAME : '';
-  // Unlock audio on user gesture so it plays on display devices
-  if (!_clapAudio) { _clapAudio = new Audio(); }
-  _clapAudio.play().then(function(){ _clapAudio.pause(); _clapAudio.currentTime = 0; }).catch(function(){});
+  // Silent play on user gesture to unlock audio for this tab
+  if (typeof playSuccessSound === 'function') {
+    var prevVol = _clapAudio ? _clapAudio.volume : 1;
+    if (!_clapAudio) playSuccessSound();
+    _clapAudio.volume = 0;
+    _clapAudio.play().catch(function(){});
+    setTimeout(function(){ if(_clapAudio){ _clapAudio.pause(); _clapAudio.currentTime=0; _clapAudio.volume=prevVol||1; } }, 100);
+  }
   updatePresentMode();
   if (o.requestFullscreen) o.requestFullscreen().catch(function(){});
   else if (o.webkitRequestFullscreen) o.webkitRequestFullscreen();

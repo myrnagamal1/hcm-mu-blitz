@@ -2417,8 +2417,11 @@ async function sendOrgNotification() {
         <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:4px;">of Target</div>
       </div>
       <div style="width:1px;height:48px;background:rgba(255,255,255,0.1);"></div>
-      <button onclick="exitPresentMode()" style="background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:10px 22px;color:rgba(255,255,255,0.4);font-size:0.8rem;cursor:pointer;font-weight:600;letter-spacing:0.06em;transition:all 0.2s;" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,0.35)'" onmouseout="this.style.color='rgba(255,255,255,0.4)';this.style.borderColor='rgba(255,255,255,0.15)'">&#x2715; EXIT</button>
-      <button id="pm-enable-sound-btn" onclick="enablePmSound()" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.5);color:#fff;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">&#x1F508; Enable Sound</button> <button id="pm-sound-btn" onclick="togglePmSound()" style="background:rgba(0,200,212,0.15);border:1px solid rgba(0,200,212,0.4);border-radius:10px;padding:10px 16px;color:#fff;font-size:1.1rem;cursor:pointer;transition:all 0.2s;" title="Toggle sound">🔔</button>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button onclick="exitPresentMode()" style="background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:10px 22px;color:rgba(255,255,255,0.4);font-size:0.8rem;cursor:pointer;font-weight:600;letter-spacing:0.06em;transition:all 0.2s;" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,0.35)'" onmouseout="this.style.color='rgba(255,255,255,0.4)';this.style.borderColor='rgba(255,255,255,0.15)'">&#x2715; EXIT</button>
+        <button id="pm-enable-sound-btn" onclick="enablePmSound()" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.5);color:#fff;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">&#x1F508; Enable Sound</button>
+        <button id="pm-sound-btn" onclick="togglePmSound()" style="background:rgba(0,200,212,0.15);border:1px solid rgba(0,200,212,0.4);border-radius:10px;padding:10px 16px;color:#fff;font-size:1.1rem;cursor:pointer;transition:all 0.2s;" title="Toggle sound">🔔</button>
+      </div>
     </div>
   </div>
   <div style="position:relative;z-index:1;padding:14px 52px 0;">

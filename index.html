@@ -1488,6 +1488,7 @@ setInterval(loadLeaderboard, REFRESH_INTERVAL);
     try {
       var data = JSON.parse(e.data);
       if (data.event === 'new-lead') {
+        loadLeaderboard();
         playSuccessSound();
         showLeadPopup(data.partner, data.account);
       } else if (data.event === 'organiser-notify') {

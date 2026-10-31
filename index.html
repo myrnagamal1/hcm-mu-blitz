@@ -2165,7 +2165,6 @@ function playAnnouncementSound() {
       gain.gain.exponentialRampToValueAtTime(0.001, t + 0.55);
       osc.start(t); osc.stop(t + 0.56);
     });
-  } catch(e) {}
 }
 function showLeadPopup(partner, account) {
   showToast('&#x1F44F;', 'NEW LEAD!', partner ? partner + ' just submitted a lead!' : 'A new lead was just submitted!');

@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 <style>
 
   :root {
@@ -1857,6 +1858,7 @@ function renderDashStats(rows) {
 
 // ── LEAD FORM ──────────────────────────────────────────
 let lfCurrentAccounts = [];
+const _submittedLeads = new Set(); // key: "account|phone" lowercased
 
 function lfPartnerChange() {
   const partner = document.getElementById('lf-partner').value;
@@ -1968,6 +1970,14 @@ function lfSubmit() {
     return;
   }
 
+  const dupKey = (account + '|' + phone).toLowerCase();
+  if (_submittedLeads.has(dupKey)) {
+    const proceed = confirm(
+      '\u26a0\ufe0f Duplicate detected!\n\n"' + account + '" with this phone number was already submitted this session.\n\nSubmit anyway?'
+    );
+    if (!proceed) return;
+  }
+
   const onMaster = ACCOUNT_VALIDATION_ENABLED
     ? lfCurrentAccounts.some(a => a.toLowerCase() === account.toLowerCase())
     : true;
@@ -1985,6 +1995,7 @@ function lfSubmit() {
     .then(r => r.json())
     .then(d => {
       if (d.status === 'ok' || d.result === 'success') {
+        _submittedLeads.add((account + '|' + phone).toLowerCase());
         playSuccessSound();
         showLeadPopup(partner, account);
         status.innerHTML = '';
@@ -2132,6 +2143,12 @@ function updatePresentMode() {
 }
 function showLeadPopup(partner, account) {
   showToast('&#x1F44F;', 'NEW LEAD!', partner ? partner + ' just submitted a lead!' : 'A new lead was just submitted!');
+  var overlay = document.getElementById('present-overlay');
+  if (overlay && overlay.style.display !== 'none' && typeof confetti === 'function') {
+    confetti({ particleCount: 120, spread: 80, origin: { y: 0.5 }, colors: ['#FFC300','#00C8D4','#ffffff','#FFD700','#009EA7'] });
+    setTimeout(function(){ confetti({ particleCount: 60, spread: 120, origin: { x: 0.1, y: 0.6 }, colors: ['#FFC300','#ffffff'] }); }, 200);
+    setTimeout(function(){ confetti({ particleCount: 60, spread: 120, origin: { x: 0.9, y: 0.6 }, colors: ['#00C8D4','#ffffff'] }); }, 350);
+  }
 }
 function closeLeadToast() { closeToast(); }
 function showOrgNotification(message) {

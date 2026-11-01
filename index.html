@@ -2391,7 +2391,6 @@ async function sendOrgNotification() {
     });
     var data = await resp.json();
     if (data.sent) {
-      playChimeSound();
       status.textContent = 'Sent!';
       input.value = '';
       setTimeout(function(){ status.textContent = ''; }, 3000);

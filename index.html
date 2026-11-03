@@ -14,17 +14,24 @@
 <style>
 
   :root {
-    --gold:    #FFC300;
-    --gold2:   #FFD700;
-    --teal:    #009EA7;
-    --teal2:   #00C8D4;
-    --sand:    #F5E6C8;
-    --night:   #070B1A;
-    --night2:  #0D1428;
-    --night3:  #111827;
-    --deep:    #060910;
+    /* SAP Partner Blitz EMEA palette */
+    --gold:    #FF6B2B;
+    --gold2:   #FF8C42;
+    --teal:    #6C3FC5;
+    --teal2:   #8B5CF6;
+    --sand:    #F0E6FF;
+    --night:   #1a0533;
+    --night2:  #230a44;
+    --night3:  #2d1055;
+    --deep:    #0f0222;
     --white:   #FFFFFF;
-    --muted:   rgba(255,255,255,0.55);
+    --muted:   rgba(255,255,255,0.60);
+    /* Brand gradient colors */
+    --blitz-blue:    #4A7FD4;
+    --blitz-purple:  #7B4FBF;
+    --blitz-magenta: #C4187A;
+    --blitz-grad: linear-gradient(135deg, #4A7FD4 0%, #7B4FBF 50%, #C4187A 100%);
+    --blitz-grad-v: linear-gradient(180deg, #4A7FD4 0%, #7B4FBF 55%, #C4187A 100%);
   }
 
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -43,25 +50,19 @@
     position: relative;
     min-height: 100vh;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    text-align: center;
-    padding: 0 20px;
+    background: var(--blitz-grad-v);
   }
 
   /* Abstract background */
   .hero-bg {
     position: absolute; inset: 0;
-    background: linear-gradient(
-      160deg,
-      #08102A 0%,
-      #0C1840 25%,
-      #0F1E4A 45%,
-      #0A1535 65%,
-      #06101F 100%
-    );
+    background: linear-gradient(135deg,
+      rgba(74,127,212,0.3) 0%,
+      rgba(123,79,191,0.2) 50%,
+      rgba(196,24,122,0.3) 100%);
     z-index: 0;
   }
   /* Subtle stars */
@@ -139,8 +140,8 @@
   }
 
   .date-pill {
-    background: rgba(255,195,0,0.12);
-    border: 1.5px solid rgba(255,195,0,0.5);
+    background: rgba(255,107,43,0.12);
+    border: 1.5px solid rgba(255,107,43,0.5);
     border-radius: 50px;
     padding: 12px 28px;
     font-size: 15px;
@@ -156,7 +157,7 @@
     display: inline-flex;
     align-items: center;
     gap: 10px;
-    background: linear-gradient(135deg, #FFC300, #FFD700);
+    background: linear-gradient(135deg, #FF6B2B, #FF8C42);
     color: #1A1200;
     font-weight: 800;
     font-size: 16px;
@@ -164,12 +165,12 @@
     border-radius: 50px;
     text-decoration: none;
     transition: all 0.3s;
-    box-shadow: 0 8px 32px rgba(255,195,0,0.35);
+    box-shadow: 0 8px 32px rgba(255,107,43,0.35);
     letter-spacing: 0.3px;
   }
   .hero-cta:hover {
     transform: translateY(-3px);
-    box-shadow: 0 14px 40px rgba(255,195,0,0.5);
+    box-shadow: 0 14px 40px rgba(255,107,43,0.5);
   }
   .hero-cta-secondary {
     background: transparent;
@@ -214,8 +215,8 @@
   /* ── STATS BAR ────────────────────────────────────────── */
   .stats-bar {
     background: linear-gradient(135deg, #0D1428, #111827);
-    border-top: 1px solid rgba(255,195,0,0.2);
-    border-bottom: 1px solid rgba(0,158,167,0.2);
+    border-top: 1px solid rgba(255,107,43,0.2);
+    border-bottom: 1px solid rgba(123,63,191,0.2);
     padding: 40px 20px;
   }
   .stats-inner {
@@ -232,7 +233,7 @@
   .stat-num {
     font-size: 48px;
     font-weight: 900;
-    background: linear-gradient(135deg, #FFC300, #FFD700);
+    background: linear-gradient(135deg, #FF6B2B, #FF8C42);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -262,8 +263,8 @@
     letter-spacing: 2px;
     text-transform: uppercase;
     color: var(--teal2);
-    background: rgba(0,200,212,0.1);
-    border: 1px solid rgba(0,200,212,0.25);
+    background: rgba(139,92,246,0.1);
+    border: 1px solid rgba(139,92,246,0.25);
     border-radius: 20px;
     padding: 5px 16px;
     margin-bottom: 16px;
@@ -301,7 +302,7 @@
   }
   .agenda-day-header {
     padding: 20px 28px;
-    background: linear-gradient(135deg, rgba(255,195,0,0.12), rgba(0,158,167,0.1));
+    background: linear-gradient(135deg, rgba(255,107,43,0.12), rgba(123,63,191,0.1));
     border-bottom: 1px solid rgba(255,255,255,0.08);
     display: flex;
     align-items: center;
@@ -310,7 +311,7 @@
   .day-icon {
     width: 44px; height: 44px;
     border-radius: 12px;
-    background: linear-gradient(135deg, #FFC300, #FFD700);
+    background: linear-gradient(135deg, #FF6B2B, #FF8C42);
     display: flex; align-items: center; justify-content: center;
     font-size: 20px;
     flex-shrink: 0;
@@ -326,10 +327,10 @@
     padding: 14px 18px;
     border-radius: 12px;
     background: rgba(255,255,255,0.04);
-    box-shadow: inset 0 0 0 1px rgba(0,200,212,0.15);
+    box-shadow: inset 0 0 0 1px rgba(139,92,246,0.15);
     transition: background 0.2s;
   }
-  .agenda-item.special { box-shadow: inset 0 0 0 1px rgba(255,195,0,0.25); background: rgba(255,195,0,0.06); }
+  .agenda-item.special { box-shadow: inset 0 0 0 1px rgba(255,107,43,0.25); background: rgba(255,107,43,0.06); }
   .agenda-item:hover { background: rgba(255,255,255,0.07); }
   .agenda-time {
     font-size: 12px;
@@ -391,8 +392,8 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    background: rgba(0,158,167,0.15);
-    border: 1.5px solid rgba(0,200,212,0.35);
+    background: rgba(123,63,191,0.15);
+    border: 1.5px solid rgba(139,92,246,0.35);
     color: var(--teal2);
     font-family: 'Sora', 'DM Sans', sans-serif;
     font-size: 13px;
@@ -403,7 +404,7 @@
     transition: all 0.2s;
     letter-spacing: 0.5px;
   }
-  .refresh-btn:hover { background: rgba(0,158,167,0.28); }
+  .refresh-btn:hover { background: rgba(123,63,191,0.28); }
   .refresh-btn .spin { display: inline-block; }
   .refresh-btn.loading .spin { animation: spin 0.8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
@@ -455,12 +456,12 @@
     font-size: 18px;
     font-weight: 900;
   }
-  .rank-1 { background: linear-gradient(135deg, #FFD700, #FFA500); color: #5A3A00; }
+  .rank-1 { background: linear-gradient(135deg, #FF8C42, #FFA500); color: #5A3A00; }
   .rank-2 { background: linear-gradient(135deg, #E8E8E8, #B0B0B0); color: #3A3A3A; }
   .rank-3 { background: linear-gradient(135deg, #CD7F32, #A05020); color: #FFF; }
   .rank-n { background: rgba(255,255,255,0.08); color: var(--muted); font-size: 14px; }
 
-  .lb-row.rank-1-row { background: rgba(255,195,0,0.08); border: 1px solid rgba(255,195,0,0.2); }
+  .lb-row.rank-1-row { background: rgba(255,107,43,0.08); border: 1px solid rgba(255,107,43,0.2); }
   .lb-row.rank-2-row { background: rgba(200,200,200,0.06); }
   .lb-row.rank-3-row { background: rgba(180,100,30,0.06); }
 
@@ -492,7 +493,7 @@
     transform-origin: left center;
     transition: transform 0.8s cubic-bezier(0.22,1,0.36,1);
   }
-  .rank-1-row .progress-fill { background: linear-gradient(90deg, #FFA500, #FFD700); }
+  .rank-1-row .progress-fill { background: linear-gradient(90deg, #FFA500, #FF8C42); }
 
   .lb-empty {
     text-align: center;
@@ -554,8 +555,8 @@
     cursor: default;
   }
   .partner-card:hover {
-    background: rgba(0,158,167,0.12);
-    border-color: rgba(0,200,212,0.35);
+    background: rgba(123,63,191,0.12);
+    border-color: rgba(139,92,246,0.35);
     transform: translateY(-3px);
     color: var(--teal2);
   }
@@ -577,7 +578,7 @@
     transition: border-color 0.2s, background 0.2s;
     box-sizing: border-box;
   }
-  .lf-input:focus { border-color: var(--teal); background: rgba(0,158,167,0.08); }
+  .lf-input:focus { border-color: var(--teal); background: rgba(123,63,191,0.08); }
   .lf-input option { background: #0D1428; color: #fff; }
   textarea.lf-input { resize: vertical; }
   .lf-suggestions {
@@ -585,7 +586,7 @@
     top: calc(100% - 4px);
     left: 0; right: 0;
     background: #0D1F38;
-    border: 1px solid rgba(0,200,212,0.3);
+    border: 1px solid rgba(139,92,246,0.3);
     border-radius: 0 0 10px 10px;
     max-height: 200px;
     overflow-y: auto;
@@ -599,12 +600,12 @@
     color: rgba(255,255,255,0.85);
     transition: background 0.15s;
   }
-  .lf-sug-item:hover, .lf-sug-item.active { background: rgba(0,158,167,0.25); color: #fff; }
+  .lf-sug-item:hover, .lf-sug-item.active { background: rgba(123,63,191,0.25); color: #fff; }
   .lf-warn {
     margin-top: 8px;
     padding: 10px 14px;
-    background: rgba(255,195,0,0.1);
-    border: 1px solid rgba(255,195,0,0.35);
+    background: rgba(255,107,43,0.1);
+    border: 1px solid rgba(255,107,43,0.35);
     border-radius: 8px;
     font-size: 12px;
     color: var(--gold);
@@ -665,8 +666,8 @@
     transition: all 0.22s;
   }
   .room-card:hover {
-    background: rgba(0,158,167,0.09);
-    border-color: rgba(0,200,212,0.3);
+    background: rgba(123,63,191,0.09);
+    border-color: rgba(139,92,246,0.3);
     transform: translateY(-2px);
   }
   .room-card-header {
@@ -678,7 +679,7 @@
   .room-icon {
     width: 36px; height: 36px;
     border-radius: 9px;
-    background: rgba(0,158,167,0.18);
+    background: rgba(123,63,191,0.18);
     display: flex; align-items: center; justify-content: center;
     font-size: 17px;
     flex-shrink: 0;
@@ -779,7 +780,7 @@
     align-items: center;
     gap: 14px;
     background: linear-gradient(135deg, #0D1428 0%, #0a2020 100%);
-    border: 1px solid rgba(0,200,212,0.4);
+    border: 1px solid rgba(139,92,246,0.4);
     border-left: 4px solid var(--teal);
     border-radius: 14px;
     padding: 16px 20px;
@@ -813,6 +814,29 @@
     animation: lt-shrink 4s linear forwards;
   }
   @keyframes lt-shrink { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+
+  /* ── SAP Brand parallelogram shapes ── */
+  .sap-shapes {
+    position: absolute; inset: 0; pointer-events: none; z-index: 1; overflow: hidden;
+  }
+  .sap-shape {
+    position: absolute;
+    width: 60px; height: 40px;
+    border: 2px solid rgba(255,255,255,0.25);
+    transform: skewX(-15deg);
+    border-radius: 2px;
+  }
+  .sap-shape.filled { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.4); }
+  .sap-shape.s1  { top:8%;  right:18%; width:70px; height:46px; }
+  .sap-shape.s2  { top:8%;  right:26%; width:55px; height:36px; opacity:.6; }
+  .sap-shape.s3  { top:8%;  right:33%; width:42px; height:28px; opacity:.35; }
+  .sap-shape.s4  { top:8%;  right:39%; width:30px; height:20px; opacity:.2; }
+  .sap-shape.s5  { top:16%; right:22%; width:55px; height:36px; opacity:.5; }
+  .sap-shape.s6  { top:16%; right:29%; width:42px; height:28px; opacity:.3; }
+  .sap-shape.s7  { top:24%; right:26%; width:42px; height:28px; opacity:.4; filled; }
+  .sap-shape.s8  { top:24%; right:32%; width:30px; height:20px; opacity:.2; }
+  .sap-shape.s9  { top:32%; right:30%; width:30px; height:20px; opacity:.3; }
+  .sap-shape.s10 { top:40%; right:33%; width:22px; height:15px; opacity:.2; }
 </style>
 <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
 </head>
@@ -840,6 +864,18 @@
 <!-- ══ HERO ══════════════════════════════════════════════ -->
 <section class="hero">
   <div class="hero-bg"></div>
+  <div class="sap-shapes">
+    <div class="sap-shape filled s1"></div>
+    <div class="sap-shape s2"></div>
+    <div class="sap-shape s3"></div>
+    <div class="sap-shape s4"></div>
+    <div class="sap-shape s5"></div>
+    <div class="sap-shape s6"></div>
+    <div class="sap-shape filled s7"></div>
+    <div class="sap-shape s8"></div>
+    <div class="sap-shape s9"></div>
+    <div class="sap-shape s10"></div>
+  </div>
   <div class="hero-stars"></div>
   <div class="hero-city">
     <svg viewBox="0 0 1920 400" preserveAspectRatio="xMidYMax meet"
@@ -862,7 +898,7 @@
       <rect x="0" y="370" width="1920" height="30" fill="#060910"/>
 
       <!-- Horizon glow -->
-      <ellipse cx="960" cy="380" rx="800" ry="60" fill="#009EA7" opacity="0.06" filter="url(#city-soft)"/>
+      <ellipse cx="960" cy="380" rx="800" ry="60" fill="#7B4FBF" opacity="0.06" filter="url(#city-soft)"/>
 
       <!-- Abstract cityline: left cluster -->
       <rect x="80"  y="260" width="40"  height="110" fill="url(#city-bld)"/>
@@ -886,7 +922,7 @@
       <rect x="1150" y="110" width="75" height="260" fill="url(#city-bld)"/>
 
       <!-- Window lights: center cluster -->
-      <g fill="#FFC300" opacity="0.18">
+      <g fill="#FF6B2B" opacity="0.18">
         <rect x="712"  y="140" width="6" height="4"/>
         <rect x="724"  y="140" width="6" height="4"/>
         <rect x="712"  y="155" width="6" height="4"/>
@@ -903,7 +939,7 @@
       </g>
 
       <!-- Teal accent lights -->
-      <g fill="#00C8D4" opacity="0.12">
+      <g fill="#8B5CF6" opacity="0.12">
         <rect x="793"  y="170" width="5" height="4"/>
         <rect x="804"  y="170" width="5" height="4"/>
         <rect x="1022" y="150" width="5" height="4"/>
@@ -1154,7 +1190,7 @@
         <button class="refresh-btn" onclick="loadLeaderboard(true)">
         <span class="spin">↻</span> Refresh Now
       </button>
-        <button class="refresh-btn" onclick="enterPresentMode()" style="background:rgba(0,200,212,0.15);border-color:rgba(0,200,212,0.5);">&#x26A1; Present</button>
+        <button class="refresh-btn" onclick="enterPresentMode()" style="background:rgba(139,92,246,0.15);border-color:rgba(139,92,246,0.5);">&#x26A1; Present</button>
       </div>
     </div>
 
@@ -1596,7 +1632,7 @@ setInterval(loadLeaderboard, REFRESH_INTERVAL);
     </div>
     <div style="display:flex;gap:10px;align-items:center;">
       <button onclick="loadDashboard(true)" id="dash-refresh-btn"
-        style="padding:9px 18px;border-radius:8px;background:rgba(0,158,167,0.2);color:var(--teal);border:1px solid var(--teal);font-size:0.85rem;font-weight:600;cursor:pointer;">
+        style="padding:9px 18px;border-radius:8px;background:rgba(123,63,191,0.2);color:var(--teal);border:1px solid var(--teal);font-size:0.85rem;font-weight:600;cursor:pointer;">
         ↻ Refresh
       </button>
       <button onclick="dashLogout()"
@@ -1608,12 +1644,12 @@ setInterval(loadLeaderboard, REFRESH_INTERVAL);
 
 
   <!-- Organiser Notify Panel -->
-  <div style="background:rgba(255,195,0,0.06);border:1px solid rgba(255,195,0,0.25);border-radius:14px;padding:20px 24px;margin-bottom:36px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+  <div style="background:rgba(255,107,43,0.06);border:1px solid rgba(255,107,43,0.25);border-radius:14px;padding:20px 24px;margin-bottom:36px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
     <span style="font-size:22px;">&#x1F4E3;</span>
     <div style="flex:1;min-width:200px;">
       <div style="font-size:0.78rem;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Notify All Attendees</div>
       <input id="notify-msg-input" type="text" placeholder="Type your announcement&hellip;"
-        style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,195,0,0.3);border-radius:8px;padding:10px 14px;color:#fff;font-size:0.9rem;outline:none;"
+        style="width:100%;background:rgba(255,255,255,0.06);border:1px solid rgba(255,107,43,0.3);border-radius:8px;padding:10px 14px;color:#fff;font-size:0.9rem;outline:none;"
         onkeydown="if(event.key==='Enter')sendOrgNotification()">
     </div>
     <button onclick="sendOrgNotification()" id="notify-btn"
@@ -1625,7 +1661,7 @@ setInterval(loadLeaderboard, REFRESH_INTERVAL);
 
   <!-- Stats cards -->
   <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:40px;" id="dash-stats">
-    <div class="dash-stat-card" style="background:rgba(0,158,167,0.12);border:1px solid rgba(0,158,167,0.3);border-radius:14px;padding:22px 20px;">
+    <div class="dash-stat-card" style="background:rgba(123,63,191,0.12);border:1px solid rgba(123,63,191,0.3);border-radius:14px;padding:22px 20px;">
       <div style="color:rgba(255,255,255,0.5);font-size:0.78rem;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px;">Total Leads</div>
       <div id="dash-total" style="color:#fff;font-size:2.2rem;font-weight:800;">—</div>
     </div>
@@ -1650,7 +1686,7 @@ setInterval(loadLeaderboard, REFRESH_INTERVAL);
       <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.12);border-radius:10px;padding:8px 14px;">
         <span style="font-size:0.78rem;color:rgba(255,255,255,0.5);white-space:nowrap;">Target leads / person:</span>
         <input type="number" min="0" placeholder="0" id="global-target-input"
-          style="width:56px;background:rgba(255,255,255,0.08);border:1px solid rgba(0,200,212,0.4);border-radius:6px;padding:5px 8px;color:#fff;font-size:0.9rem;font-weight:700;text-align:center;outline:none;"
+          style="width:56px;background:rgba(255,255,255,0.08);border:1px solid rgba(139,92,246,0.4);border-radius:6px;padding:5px 8px;color:#fff;font-size:0.9rem;font-weight:700;text-align:center;outline:none;"
           onchange="setGlobalTarget(parseInt(this.value)||0)">
       </div>
     </div>
@@ -1666,7 +1702,7 @@ setInterval(loadLeaderboard, REFRESH_INTERVAL);
           oninput="filterLeadsTable()"
           style="padding:8px 14px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.07);color:#fff;font-size:0.85rem;width:220px;outline:none;">
         <button onclick="downloadLeadsExcel()"
-          style="padding:8px 16px;border-radius:8px;background:rgba(0,158,167,0.15);border:1px solid rgba(0,200,212,0.35);color:var(--teal2);font-size:0.82rem;font-weight:600;cursor:pointer;white-space:nowrap;">
+          style="padding:8px 16px;border-radius:8px;background:rgba(123,63,191,0.15);border:1px solid rgba(139,92,246,0.35);color:var(--teal2);font-size:0.82rem;font-weight:600;cursor:pointer;white-space:nowrap;">
           ↓ Excel
         </button>
       </div>
@@ -1693,10 +1729,10 @@ setInterval(loadLeaderboard, REFRESH_INTERVAL);
   transition:all 0.15s;white-space:nowrap;
 }
 .dash-tab-btn.active {
-  background:rgba(0,158,167,0.2);border-color:var(--teal);color:var(--teal);
+  background:rgba(123,63,191,0.2);border-color:var(--teal);color:var(--teal);
 }
 #dash-table th {
-  background:rgba(0,158,167,0.15);
+  background:rgba(123,63,191,0.15);
   color:rgba(255,255,255,0.7);
   font-size:0.73rem;
   text-transform:uppercase;
@@ -2110,9 +2146,9 @@ function updatePresentMode() {
   var dst = document.getElementById('pm-lb-body');
   if (!src || !dst) return;
   var rows = src.querySelectorAll('tr.lb-row');
-  var rankColors = ['#FFD700','#C0C0C0','#CD7F32'];
-  var rankGlows  = ['0 0 40px rgba(255,215,0,0.5)','0 0 24px rgba(192,192,192,0.35)','0 0 18px rgba(205,127,50,0.35)'];
-  var rankBg     = ['linear-gradient(135deg,rgba(255,215,0,0.1),rgba(255,165,0,0.04))','linear-gradient(135deg,rgba(192,192,192,0.08),rgba(160,160,160,0.03))','linear-gradient(135deg,rgba(205,127,50,0.08),rgba(180,100,20,0.03))'];
+  var rankColors = ['#FF8C42','#C0C0C0','#CD7F32'];
+  var rankGlows  = ['0 0 40px rgba(255,140,66,0.5)','0 0 24px rgba(192,192,192,0.35)','0 0 18px rgba(205,127,50,0.35)'];
+  var rankBg     = ['linear-gradient(135deg,rgba(255,140,66,0.1),rgba(255,165,0,0.04))','linear-gradient(135deg,rgba(192,192,192,0.08),rgba(160,160,160,0.03))','linear-gradient(135deg,rgba(205,127,50,0.08),rgba(180,100,20,0.03))'];
   var out = '';
   rows.forEach(function(row, i) {
     var partnerEl = row.querySelector('.partner-name');
@@ -2129,7 +2165,7 @@ function updatePresentMode() {
     var m2       = fillW.match(/scaleX\(([^)]+)\)/);
     var barPct   = m2 ? (parseFloat(m2[1])*100).toFixed(1) : '0';
     var isTop    = i < 3;
-    var color    = isTop ? rankColors[i] : 'rgba(0,200,212,0.9)';
+    var color    = isTop ? rankColors[i] : 'rgba(139,92,246,0.9)';
     var glow     = isTop ? rankGlows[i] : 'none';
     var bg       = isTop ? rankBg[i] : 'rgba(255,255,255,0.025)';
     var border   = isTop ? color : 'rgba(255,255,255,0.06)';
@@ -2205,9 +2241,9 @@ function showLeadPopup(partner, account) {
   showToast('&#x1F44F;', 'NEW LEAD!', partner ? partner + ' just submitted a lead!' : 'A new lead was just submitted!');
   var overlay = document.getElementById('present-overlay');
   if (overlay && overlay.style.display !== 'none' && typeof confetti === 'function') {
-    confetti({ particleCount: 120, spread: 80, origin: { y: 0.5 }, colors: ['#FFC300','#00C8D4','#ffffff','#FFD700','#009EA7'] });
-    setTimeout(function(){ confetti({ particleCount: 60, spread: 120, origin: { x: 0.1, y: 0.6 }, colors: ['#FFC300','#ffffff'] }); }, 200);
-    setTimeout(function(){ confetti({ particleCount: 60, spread: 120, origin: { x: 0.9, y: 0.6 }, colors: ['#00C8D4','#ffffff'] }); }, 350);
+    confetti({ particleCount: 120, spread: 80, origin: { y: 0.5 }, colors: ['#FF6B2B','#8B5CF6','#ffffff','#FF8C42','#7B4FBF'] });
+    setTimeout(function(){ confetti({ particleCount: 60, spread: 120, origin: { x: 0.1, y: 0.6 }, colors: ['#FF6B2B','#ffffff'] }); }, 200);
+    setTimeout(function(){ confetti({ particleCount: 60, spread: 120, origin: { x: 0.9, y: 0.6 }, colors: ['#8B5CF6','#ffffff'] }); }, 350);
     showPmNotification('🎉 NEW LEAD!', partner ? partner + ' just submitted a lead!' : 'A new lead was submitted!');
   }
 }
@@ -2344,7 +2380,7 @@ function renderLeadsTable(rows) {
     }).join('');
     const chk = `<td style="text-align:center;"><input type="checkbox" title="Exclude from leaderboard" ${excl ? 'checked' : ''} onchange="toggleExclude(${globalIdx})" style="cursor:pointer;accent-color:#f87171;width:15px;height:15px;"></td>`;
     const salescreenChecked = row.salescreen === 'YES';
-    const salescreenCell = `<td style="text-align:center;"><input type="checkbox" title="Salescreen" ${salescreenChecked ? 'checked' : ''} onchange="toggleSalescreen(${globalIdx}, this)" style="cursor:pointer;accent-color:#00C8D4;width:15px;height:15px;"></td>`;
+    const salescreenCell = `<td style="text-align:center;"><input type="checkbox" title="Salescreen" ${salescreenChecked ? 'checked' : ''} onchange="toggleSalescreen(${globalIdx}, this)" style="cursor:pointer;accent-color:#8B5CF6;width:15px;height:15px;"></td>`;
     const del = `<td style="text-align:center;"><button onclick="deleteLead(${globalIdx})" title="Delete lead" style="background:none;border:none;cursor:pointer;color:#f87171;font-size:15px;padding:2px 6px;">✕</button></td>`;
     return `<tr style="${rowStyle}">${chk}${cells}${salescreenCell}${del}</tr>`;
   }).join('');
@@ -2429,20 +2465,20 @@ async function sendOrgNotification() {
 <style>
 @keyframes pmSlideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
 @keyframes scanline{0%{transform:translateY(-100%)}100%{transform:translateY(100vh)}}
-@keyframes pmFlash{0%{background:rgba(0,200,212,0.2);box-shadow:0 0 40px rgba(0,200,212,0.3)}100%{background:transparent;box-shadow:none}}
+@keyframes pmFlash{0%{background:rgba(139,92,246,0.2);box-shadow:0 0 40px rgba(139,92,246,0.3)}100%{background:transparent;box-shadow:none}}
 #pm-lb-body::-webkit-scrollbar{display:none}
 .pm-row-flash{animation:pmFlash 1s ease-out !important}
 </style>
 <div id="present-overlay" style="display:none;position:fixed;inset:0;z-index:99999;flex-direction:column;overflow:hidden;background:#020b14;">
-  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(0,200,212,0.1) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 90% 110%,rgba(255,180,0,0.07) 0%,transparent 60%);pointer-events:none;"></div>
-  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,200,212,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,200,212,0.03) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;"></div>
-  <div style="position:absolute;left:0;right:0;height:200px;background:linear-gradient(transparent,rgba(0,200,212,0.04),transparent);animation:scanline 5s linear infinite;pointer-events:none;"></div>
+  <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 50% at 50% -10%,rgba(139,92,246,0.1) 0%,transparent 70%),radial-gradient(ellipse 50% 40% at 90% 110%,rgba(255,180,0,0.07) 0%,transparent 60%);pointer-events:none;"></div>
+  <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(139,92,246,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(139,92,246,0.03) 1px,transparent 1px);background-size:50px 50px;pointer-events:none;"></div>
+  <div style="position:absolute;left:0;right:0;height:200px;background:linear-gradient(transparent,rgba(139,92,246,0.04),transparent);animation:scanline 5s linear infinite;pointer-events:none;"></div>
   <div style="position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;padding:28px 52px 0;">
     <div style="display:flex;align-items:center;gap:20px;">
       <div style="font-size:2.8rem;filter:drop-shadow(0 0 16px gold);">&#x1F3C6;</div>
       <div>
         <div style="font-size:0.62rem;font-weight:800;letter-spacing:0.25em;color:var(--teal);text-transform:uppercase;margin-bottom:4px;">Live Leaderboard</div>
-        <div id="pm-event-name" style="font-size:1.8rem;font-weight:900;color:#fff;letter-spacing:-0.02em;text-shadow:0 0 30px rgba(0,200,212,0.35);"></div>
+        <div id="pm-event-name" style="font-size:1.8rem;font-weight:900;color:#fff;letter-spacing:-0.02em;text-shadow:0 0 30px rgba(139,92,246,0.35);"></div>
       </div>
     </div>
     <div style="display:flex;align-items:center;gap:36px;">
@@ -2452,35 +2488,35 @@ async function sendOrgNotification() {
       </div>
       <div style="width:1px;height:48px;background:rgba(255,255,255,0.1);"></div>
       <div style="text-align:center;">
-        <div id="pm-target-pct" style="font-size:3.2rem;font-weight:900;color:var(--teal);line-height:1;text-shadow:0 0 28px rgba(0,200,212,0.7);">0%</div>
+        <div id="pm-target-pct" style="font-size:3.2rem;font-weight:900;color:var(--teal);line-height:1;text-shadow:0 0 28px rgba(139,92,246,0.7);">0%</div>
         <div style="font-size:0.6rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-top:4px;">of Target</div>
       </div>
       <div style="width:1px;height:48px;background:rgba(255,255,255,0.1);"></div>
       <div style="display:flex;align-items:center;gap:10px;">
         <button onclick="exitPresentMode()" style="background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:10px 22px;color:rgba(255,255,255,0.4);font-size:0.8rem;cursor:pointer;font-weight:600;letter-spacing:0.06em;transition:all 0.2s;" onmouseover="this.style.color='#fff';this.style.borderColor='rgba(255,255,255,0.35)'" onmouseout="this.style.color='rgba(255,255,255,0.4)';this.style.borderColor='rgba(255,255,255,0.15)'">&#x2715; EXIT</button>
         <button id="pm-enable-sound-btn" onclick="enablePmSound()" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.5);color:#fff;padding:6px 14px;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;">&#x1F508; Enable Sound</button>
-        <button id="pm-sound-btn" onclick="togglePmSound()" style="background:rgba(0,200,212,0.15);border:1px solid rgba(0,200,212,0.4);border-radius:10px;padding:10px 16px;color:#fff;font-size:1.1rem;cursor:pointer;transition:all 0.2s;" title="Toggle sound">🔔</button>
+        <button id="pm-sound-btn" onclick="togglePmSound()" style="background:rgba(139,92,246,0.15);border:1px solid rgba(139,92,246,0.4);border-radius:10px;padding:10px 16px;color:#fff;font-size:1.1rem;cursor:pointer;transition:all 0.2s;" title="Toggle sound">🔔</button>
       </div>
     </div>
   </div>
   <div style="position:relative;z-index:1;padding:14px 52px 0;">
     <div style="display:flex;align-items:center;gap:14px;">
       <div style="flex:1;height:4px;background:rgba(255,255,255,0.06);border-radius:99px;overflow:hidden;">
-        <div id="pm-target-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:99px;transition:width 1s cubic-bezier(0.34,1.2,0.64,1);box-shadow:0 0 10px rgba(0,200,212,0.5);"></div>
+        <div id="pm-target-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:99px;transition:width 1s cubic-bezier(0.34,1.2,0.64,1);box-shadow:0 0 10px rgba(139,92,246,0.5);"></div>
       </div>
       <div id="pm-target-msg" style="font-size:0.75rem;color:rgba(255,255,255,0.35);white-space:nowrap;"></div>
     </div>
   </div>
   <div id="pm-lb-body" style="position:relative;z-index:1;flex:1;overflow-y:auto;padding:18px 52px 40px;scrollbar-width:none;"></div>
-  <div id="pm-notification" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;text-align:center;pointer-events:none;background:linear-gradient(135deg,rgba(0,200,212,0.15),rgba(255,195,0,0.15));border:2px solid rgba(0,200,212,0.6);border-radius:24px;padding:32px 48px;backdrop-filter:blur(12px);box-shadow:0 8px 40px rgba(0,200,212,0.4);"><div id="pm-notif-title" style="font-size:3rem;font-weight:900;letter-spacing:0.05em;background:linear-gradient(135deg,#FFC300,#00C8D4);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;text-shadow:none;"></div><div id="pm-notif-sub" style="font-size:1.6rem;font-weight:700;color:#ffffff;opacity:0.9;"></div></div>
+  <div id="pm-notification" style="display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10;text-align:center;pointer-events:none;background:linear-gradient(135deg,rgba(139,92,246,0.15),rgba(255,107,43,0.15));border:2px solid rgba(139,92,246,0.6);border-radius:24px;padding:32px 48px;backdrop-filter:blur(12px);box-shadow:0 8px 40px rgba(139,92,246,0.4);"><div id="pm-notif-title" style="font-size:3rem;font-weight:900;letter-spacing:0.05em;background:linear-gradient(135deg,#FF6B2B,#8B5CF6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px;text-shadow:none;"></div><div id="pm-notif-sub" style="font-size:1.6rem;font-weight:700;color:#ffffff;opacity:0.9;"></div></div>
 </div>
 
-<div id="global-sound-banner" style="position:fixed;bottom:24px;right:24px;z-index:99999;background:linear-gradient(135deg,#00C8D4,#0099a8);color:#fff;padding:12px 20px;border-radius:50px;box-shadow:0 4px 20px rgba(0,200,212,0.5);cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;animation:pulse-glow 2s ease-in-out infinite;" onclick="enableSound()"><span style="font-size:20px;">🔈</span><span>Tap to Enable Sound</span></div>
-<style>@keyframes pm-notif-pop{0%{opacity:0;transform:translate(-50%,-50%) scale(0.6);}100%{opacity:1;transform:translate(-50%,-50%) scale(1);}}@keyframes pm-notif-fade{0%{opacity:1;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-50%) scale(0.8);}}@keyframes pulse-glow{0%,100%{box-shadow:0 4px 20px rgba(0,200,212,0.5);}50%{box-shadow:0 4px 32px rgba(0,200,212,0.9);}}</style>
+<div id="global-sound-banner" style="position:fixed;bottom:24px;right:24px;z-index:99999;background:linear-gradient(135deg,#8B5CF6,#0099a8);color:#fff;padding:12px 20px;border-radius:50px;box-shadow:0 4px 20px rgba(139,92,246,0.5);cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;animation:pulse-glow 2s ease-in-out infinite;" onclick="enableSound()"><span style="font-size:20px;">🔈</span><span>Tap to Enable Sound</span></div>
+<style>@keyframes pm-notif-pop{0%{opacity:0;transform:translate(-50%,-50%) scale(0.6);}100%{opacity:1;transform:translate(-50%,-50%) scale(1);}}@keyframes pm-notif-fade{0%{opacity:1;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-50%) scale(0.8);}}@keyframes pulse-glow{0%,100%{box-shadow:0 4px 20px rgba(139,92,246,0.5);}50%{box-shadow:0 4px 32px rgba(139,92,246,0.9);}}</style>
 
-<a id="feedback-btn" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAO__dEeylZUQUxBNEZNRThBTFJKNkQxNjJPQ0I0MTcxMS4u" target="_blank" rel="noopener" style="position:fixed;bottom:24px;left:24px;z-index:99998;background:linear-gradient(135deg,#FFC300,#e6a800);color:#000;padding:12px 20px;border-radius:50px;box-shadow:0 4px 20px rgba(255,195,0,0.5);cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;text-decoration:none;animation:pulse-glow-gold 2s ease-in-out infinite;"><span style="font-size:20px;">&#x1F4DD;</span><span>Share Feedback</span></a>
-<style>@keyframes pulse-glow-gold{0%,100%{box-shadow:0 4px 20px rgba(255,195,0,0.5);}50%{box-shadow:0 4px 32px rgba(255,195,0,0.9);}}</style>
+<a id="feedback-btn" href="https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=DQSIkWdsW0yxEjajBLZtrQAAAAAAAAAAAAO__dEeylZUQUxBNEZNRThBTFJKNkQxNjJPQ0I0MTcxMS4u" target="_blank" rel="noopener" style="position:fixed;bottom:24px;left:24px;z-index:99998;background:linear-gradient(135deg,#FF6B2B,#e6a800);color:#000;padding:12px 20px;border-radius:50px;box-shadow:0 4px 20px rgba(255,107,43,0.5);cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:700;font-size:14px;text-decoration:none;animation:pulse-glow-gold 2s ease-in-out infinite;"><span style="font-size:20px;">&#x1F4DD;</span><span>Share Feedback</span></a>
+<style>@keyframes pulse-glow-gold{0%,100%{box-shadow:0 4px 20px rgba(255,107,43,0.5);}50%{box-shadow:0 4px 32px rgba(255,107,43,0.9);}}</style>
 
-<div id="qr-panel" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99997;display:flex;flex-direction:column;align-items:center;gap:8px;"><div id="qr-box" style="display:none;background:#fff;border-radius:16px;padding:12px;box-shadow:0 8px 32px rgba(0,0,0,0.5);"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhwAAAIcCAIAAAAynOArAAALuElEQVR4nO3cMY7ryhVF0W73C516/gP8qdOGPAODwNu4uFVcawCSSEraqOR8fz6fLwAo/Ct5FQAQFQBKogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZP58LfPz7/98vdXvf/8Ze68T7/Pk/anu4ZPPvO11Jk1e+61+lz1TJxUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAuHf768StmyeqbaLqdap7OLk3tW0j69attsnv2OQ9fPP/xiQnFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVAB49/bXts2cWzeFqu2mbe916+bSth2tyV24iv+Nv+ekAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgCZa7e/uG93aNse1+QWWfW8tt1D7uOkAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZ218XqjapJretTtzaevOO1uT358SdujdzUgEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAzLXbX/aCztoHm9zseuLEXa/JHa0T788T/jf+npMKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqALx7++vW3aFJk7teJ77OEyde1+T92cb/xgwnFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIfH8+n+7VWGHbxtHkltS2a6+cuMdVPYsTr/3NnFQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBIHPt9teT3aFqU2jb3tTkdZ34Xidee+XEHa3qWWz7nd76vJxUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRAeDe7a9qn6faAtq2vXPi/TnxPt+6IXbiRtbkZ771/kxyUgEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAzJ+vA1VbNyfu/Jx4XSfujFWvM7nrVbl1i+zE78/Pgf8/TioAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkPn+fD5fp9m2g7RtL6gyubl0osnnte1ZbPuuvvl/YxsnFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADI/PlaZtuO1uTrnLhf9MS2e1iZ/P5suz+3fje23ecTOakAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQOb78/l8bTK54VO5dWds231+Ytu1b/tuTDpxI+vETbPfZc/dSQWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMn++DrRtn2fbBtQT2zbETtw4mvzM255X5c3f+Vs5qQCQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogLAu7e/tm0BVftgT5y4fzX5XpPP9Iltm29PbLuHT2zb3/td9jud5KQCQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKAO/e/qr2eao9pcktsicmd6KeePMOUmXbPljl1m20J058Xk84qQCQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogLAvdtf1a7Otn0e+1f/35u3m6r9q8lNvG17XJMm/xN+DryHTioAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAcO/217bdoW07UdUG1OSz2Gbbd6Ny4vM68be87b22cVIBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgHu3v07cHar2uJ6814k7SCd+5ls3uya39arPPPnbOfF3sY2TCgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgDcu/1V7fxs296Z3FyaNHld2679icnNrie27XFNOnE77vfAz+ykAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgCZ78/n83XjllT1Xidu+EzewxN3z7Zd+xPbvvPV83JdZ/2Wn3BSASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYB3b39N2rbhc+Je2bZdpm227U09ceJ9vtWv7S8AbiUqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgHu3v/h7kztRJ26Rbdsru9WJ38PJHbafZXtuFScVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMj8+XqxW/eCtrn1uk7cRtu2W3Xr/tUTt16XkwoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAvHv7a3IvaNvrvHlra3Krbdsu0+TzunWnbvKZ/rx4G81JBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQDu3f7athd063VN7g5NbnZV77Vtc2nbvtMku2dncVIBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgHu3v27dOJq8rm1bSSfa9rxO3FjbtpE1+Zl/l137JCcVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUALh3+2tyD+fWfZ5t+2nbnukTtz73yX2wE1W7Xm/+/3FSASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYB7t7+2bQpt+zxPtoAm94u2OXEradu1b9sHm/yuTv6+fi79rjqpAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAsC921+37uE8sW2P68RnUd3Dbftp2/a4tjnxef1eug/mpAJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoA925/3bpfdOKGT7VNdOLzmrz2W3eiJj/Ptu/Y74t/O04qAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAPDu7a837w5t24DatnF04p7S5DM98f5s2zTbdn+2cVIBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgMy121/8vW2bXbfuMm279uq5n7gLN+l32f2pOKkAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQMb212GqLaDJ15m07bomd7227WhV+2CVE5/7iZxUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASBz7fbX5KbQpBP3uCafxZNr37bHNWlyH+yJyftTbZFtu4fbOKkAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICwLu3v7btKZ2o2iaa3L86cU9p8jOfuEU2eV0nbnb9HPiZnVQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBIPP9+Xy6VwPg1ZxUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAvir/A0qJqMRpA+CNAAAAAElFTkSuQmCC" style="width:180px;height:180px;display:block;" alt="Scan to open Blitz page"/><p style="margin:6px 0 0;text-align:center;font-size:11px;color:#333;font-weight:600;">Scan to open Blitz</p></div><button onclick="var b=document.getElementById('qr-box');b.style.display=b.style.display==='block'?'none':'block'" style="background:linear-gradient(135deg,#020b14,#0a2a3a);border:2px solid rgba(0,200,212,0.6);color:#00C8D4;padding:10px 18px;border-radius:50px;cursor:pointer;box-shadow:0 4px 20px rgba(0,200,212,0.3);display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="3" height="3"/><rect x="19" y="14" width="2" height="2"/><rect x="14" y="19" width="2" height="2"/><rect x="18" y="18" width="3" height="3"/></svg>QR Code</button></div>
+<div id="qr-panel" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99997;display:flex;flex-direction:column;align-items:center;gap:8px;"><div id="qr-box" style="display:none;background:#fff;border-radius:16px;padding:12px;box-shadow:0 8px 32px rgba(0,0,0,0.5);"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAhwAAAIcCAIAAAAynOArAAALuElEQVR4nO3cMY7ryhVF0W73C516/gP8qdOGPAODwNu4uFVcawCSSEraqOR8fz6fLwAo/Ct5FQAQFQBKogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZP58LfPz7/98vdXvf/8Ze68T7/Pk/anu4ZPPvO11Jk1e+61+lz1TJxUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAuHf768StmyeqbaLqdap7OLk3tW0j69attsnv2OQ9fPP/xiQnFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVAB49/bXts2cWzeFqu2mbe916+bSth2tyV24iv+Nv+ekAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgCZa7e/uG93aNse1+QWWfW8tt1D7uOkAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZ218XqjapJretTtzaevOO1uT358SdujdzUgEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAzLXbX/aCztoHm9zseuLEXa/JHa0T788T/jf+npMKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqALx7++vW3aFJk7teJ77OEyde1+T92cb/xgwnFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIfH8+n+7VWGHbxtHkltS2a6+cuMdVPYsTr/3NnFQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBIHPt9teT3aFqU2jb3tTkdZ34Xidee+XEHa3qWWz7nd76vJxUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRAeDe7a9qn6faAtq2vXPi/TnxPt+6IXbiRtbkZ771/kxyUgEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAzJ+vA1VbNyfu/Jx4XSfujFWvM7nrVbl1i+zE78/Pgf8/TioAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkPn+fD5fp9m2g7RtL6gyubl0osnnte1ZbPuuvvl/YxsnFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADI/PlaZtuO1uTrnLhf9MS2e1iZ/P5suz+3fje23ecTOakAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQOb78/l8bTK54VO5dWds231+Ytu1b/tuTDpxI+vETbPfZc/dSQWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMn++DrRtn2fbBtQT2zbETtw4mvzM255X5c3f+Vs5qQCQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogLAu7e/tm0BVftgT5y4fzX5XpPP9Iltm29PbLuHT2zb3/td9jud5KQCQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKAO/e/qr2eao9pcktsicmd6KeePMOUmXbPljl1m20J058Xk84qQCQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogLAvdtf1a7Otn0e+1f/35u3m6r9q8lNvG17XJMm/xN+DryHTioAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAcO/217bdoW07UdUG1OSz2Gbbd6Ny4vM68be87b22cVIBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgHu3v07cHar2uJ6814k7SCd+5ls3uya39arPPPnbOfF3sY2TCgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgDcu/1V7fxs296Z3FyaNHld2679icnNrie27XFNOnE77vfAz+ykAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgCZ78/n83XjllT1Xidu+EzewxN3z7Zd+xPbvvPV83JdZ/2Wn3BSASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYB3b39N2rbhc+Je2bZdpm227U09ceJ9vtWv7S8AbiUqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgHu3v/h7kztRJ26Rbdsru9WJ38PJHbafZXtuFScVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMj8+XqxW/eCtrn1uk7cRtu2W3Xr/tUTt16XkwoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAvHv7a3IvaNvrvHlra3Krbdsu0+TzunWnbvKZ/rx4G81JBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQDu3f7athd063VN7g5NbnZV77Vtc2nbvtMku2dncVIBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgHu3v27dOJq8rm1bSSfa9rxO3FjbtpE1+Zl/l137JCcVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUALh3+2tyD+fWfZ5t+2nbnukTtz73yX2wE1W7Xm/+/3FSASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYB7t7+2bQpt+zxPtoAm94u2OXEradu1b9sHm/yuTv6+fi79rjqpAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAsC921+37uE8sW2P68RnUd3Dbftp2/a4tjnxef1eug/mpAJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoA925/3bpfdOKGT7VNdOLzmrz2W3eiJj/Ptu/Y74t/O04qAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAPDu7a837w5t24DatnF04p7S5DM98f5s2zTbdn+2cVIBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgMy121/8vW2bXbfuMm279uq5n7gLN+l32f2pOKkAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQMb212GqLaDJ15m07bomd7227WhV+2CVE5/7iZxUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASBz7fbX5KbQpBP3uCafxZNr37bHNWlyH+yJyftTbZFtu4fbOKkAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICwLu3v7btKZ2o2iaa3L86cU9p8jOfuEU2eV0nbnb9HPiZnVQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBIPP9+Xy6VwPg1ZxUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAMqICQEZUAMiICgAZUQEgIyoAZEQFgIyoAJARFQAyogJARlQAyIgKABlRASAjKgBkRAWAjKgAkBEVADKiAkBGVADIiAoAGVEBICMqAGREBYCMqACQERUAvir/A0qJqMRpA+CNAAAAAElFTkSuQmCC" style="width:180px;height:180px;display:block;" alt="Scan to open Blitz page"/><p style="margin:6px 0 0;text-align:center;font-size:11px;color:#333;font-weight:600;">Scan to open Blitz</p></div><button onclick="var b=document.getElementById('qr-box');b.style.display=b.style.display==='block'?'none':'block'" style="background:linear-gradient(135deg,#020b14,#0a2a3a);border:2px solid rgba(139,92,246,0.6);color:#8B5CF6;padding:10px 18px;border-radius:50px;cursor:pointer;box-shadow:0 4px 20px rgba(139,92,246,0.3);display:flex;align-items:center;gap:8px;font-weight:700;font-size:13px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="3" height="3"/><rect x="19" y="14" width="2" height="2"/><rect x="14" y="19" width="2" height="2"/><rect x="18" y="18" width="3" height="3"/></svg>QR Code</button></div>
 </body>
 </html>
